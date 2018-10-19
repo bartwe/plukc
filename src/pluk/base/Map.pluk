@@ -1,0 +1,296 @@
+class pluk.base.Map<TKey, TValue> : Iterable<KeyValuePair<TKey, TValue>>, Indexable<TKey, TValue>
+{
+  PrimitiveArray<MapBucket<TKey, TValue>?> buckets = new(0, null);
+  EqualityComparer<TKey> comparator;
+  int count = 0;
+  int limit = 0;
+  
+  int Count { get { return count; } }
+
+  this()
+  {
+    comparator = new ObjectEqualityComparer<TKey>();
+  }
+  
+  this(EqualityComparer<TKey> comparator)
+  {
+    this.comparator = comparator;
+  }
+  
+  void Dump()
+  {
+//    string s="";
+//    for (var k in Keys)
+//      s = s +"|"+Object.ToString(k);
+//    Console.WriteLine("map: "+count+","+limit+" "+s);
+  }
+  
+  void Add(TKey key, TValue value)
+  {
+    if (count == limit)
+    {
+			var old = buckets;
+			if (limit == 0)
+				limit = 11;
+			else
+				limit = limit * 2 - 1;
+			buckets = new(limit, null);
+			int i = 0;
+			while (i < old.Length)
+			{
+				var b = old[i];
+				while (?b)
+				{
+					var c = ~b;
+					b = c.next;
+					var idx = c.hashcode % limit;
+					if (idx < 0) idx = -idx;
+					c.next = buckets[idx];
+					buckets[idx] = c;
+				}
+				i = i + 1;
+			}
+//			Console.WriteLine("map: rebuild");
+//			Dump();
+    }
+    
+    var hash = comparator.HashCode(key);
+    var idx = hash % limit;
+    if (idx < 0) idx = -idx;
+		var b = buckets[idx];
+    while (?b)
+    {
+        var c = ~b;
+        if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+            throw new ArgumentException("key");
+        b = c.next;
+    }
+    MapBucket<TKey, TValue> bucket = new(buckets[idx], hash, key, value);
+    buckets[idx] = bucket;
+    count = count + 1;
+//    Console.WriteLine("map.add");
+//    Dump();
+    if (!ContainsKey(key))
+      throw new Exception();
+  }
+  
+  void Clear()
+  {
+    buckets = new(0, null);
+    count = 0;
+    limit = 0;
+  }
+  
+  override TValue OperatorGetIndex(TKey key)
+  {
+    if (limit != 0)
+    {
+	  	var hash = comparator.HashCode(key);
+			var idx = hash % limit;
+      if (idx < 0) idx = -idx;
+			var b = buckets[idx];
+			while (?b)
+			{
+				var c = ~b;
+				if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+				{
+					return c.value;
+				}
+				b = c.next;
+			}
+    }
+    throw new ArgumentException("key");
+  }
+  
+  void OperatorSetIndex(TKey key, TValue value)
+  {
+		if (limit != 0)
+	  {
+			var hash = comparator.HashCode(key);
+			var idx = hash % limit;
+      if (idx < 0) idx = -idx;
+//			Console.WriteLine("map: "+limit+":"+buckets.Length+":"+idx);
+			var b = buckets[idx];
+			while (?b)
+			{
+				var c = ~b;
+				if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+				{
+					c.value = value;
+					return;
+				}
+				b = c.next;
+			}
+    }
+    Add(key, value);
+    if (!ContainsKey(key))
+      throw new Exception();
+  }
+  
+  bool ContainsKey(TKey key)
+  {
+    if (limit == 0) return false;
+		var hash = comparator.HashCode(key);
+		var idx = hash % limit;
+    if (idx < 0) idx = -idx;
+		var b = buckets[idx];
+		while (?b)
+		{
+	    var c = ~b;
+  		if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+	  	  return true;
+      b = c.next;
+    }
+    return false;
+  }
+  
+  Maybe<TValue> TryGetValue(TKey key)
+  {
+		if (limit == 0) return new();
+		var hash = comparator.HashCode(key);
+		var idx = hash % limit;
+		if (idx < 0) idx = -idx;
+		var b = buckets[idx];
+		while (?b)
+		{
+	    var c = ~b;
+  		if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+	  	{
+		    return new(c.value);
+      }
+      b = c.next;
+    }
+    return new();
+  }
+  
+  TValue Remove(TKey key)
+  {
+  	var hash = comparator.HashCode(key);
+	  var idx = hash % limit;
+    if (idx < 0) idx = -idx;
+	  var b = buckets[idx];
+  	MapBucket<TKey, TValue>? prevBucket = null;
+	  while (?b)
+  	{
+	    var c = ~b;
+	  	if ((c.hashcode == hash)&& comparator.Equals(c.key, key))
+		  {
+		    if (?prevBucket)
+    			(~prevBucket).next = c.next;
+  		  else
+	  	    buckets[idx] = c.next;
+		    count = count - 1;
+		    return c.value;
+      }
+      prevBucket = c;
+      b = c.next;
+    }
+    throw new ArgumentException("key");
+  }
+  
+  override Iterable<TKey> Indices
+  {
+    get
+    {
+      return Keys;
+    }
+  }
+  
+  Iterable<TKey> Keys
+  {
+    get
+    {
+		// todo
+		List<TKey> keys = new();
+		int i = 0;
+		while (i < buckets.Length)
+		{
+		    var nb = buckets[i];
+			while (?nb)
+			{
+			    var c = ~nb;
+				keys.Add(c.key);
+				nb = c.next;
+			}
+			i = i + 1;
+		}
+      return keys;
+    }
+  }
+  
+  Iterable<TValue> Values
+  {
+    get
+    {
+		// todo
+		List<TValue> values = new();
+		int i = 0;
+		while (i < buckets.Length)
+		{
+		    var nb = buckets[i];
+			while (?nb)
+			{
+			    var c = ~nb;
+				values.Add(c.value);
+				nb = c.next;
+			}
+			i = i + 1;
+		}
+      return values;
+    }
+  }
+  
+  override Iterator<KeyValuePair<TKey, TValue>> CreateIterator()
+  {
+    if (count == 0)
+      return <EmptyIterator<KeyValuePair<TKey, TValue>>>.Instance;
+    return new MapIterator<TKey, TValue>(buckets);
+  }
+}
+
+internal class pluk.base.MapIterator<TKey, TValue> : Iterator<KeyValuePair<TKey, TValue>>
+{
+  PrimitiveArray<MapBucket<TKey, TValue>?> buckets;
+  MapBucket<TKey, TValue>? bucket;
+  int len;
+  int idx = 0;
+    
+  this(PrimitiveArray<MapBucket<TKey, TValue>?> buckets)
+  {
+    this.buckets = buckets;
+    len = buckets.Length;
+  }
+  
+  override bool Move()
+  {
+    if (?bucket)
+      bucket = (~bucket).next;
+    while ((!?bucket) && (idx < len))
+    {
+      bucket = buckets[idx];
+      idx = idx + 1;
+    }
+    return ?bucket;
+  }
+  
+  override KeyValuePair<TKey, TValue> Value()
+  {
+    return new((~bucket).key, (~bucket).value);
+  }  
+}
+
+internal class pluk.base.MapBucket<TKey, TValue>
+{
+	public MapBucket<TKey, TValue>? next;
+	public int hashcode;
+	public TKey key;
+	public TValue value;
+	
+	this(MapBucket<TKey, TValue>? next, int hashcode, TKey key, TValue value)
+	{
+		this.next = next;
+		this.hashcode = hashcode;
+		this.key = key;
+		this.value = value;
+	}
+}

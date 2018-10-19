@@ -1,0 +1,31 @@
+class TestImplicit : Application
+{
+  override void Main()
+  {
+    B b;
+    A a = new();
+    b = a;
+    b = b;
+    a = b;
+  }
+}
+
+class A
+{
+  implicit B ToB(A self)
+  {
+    Console.WriteLine("A->B");
+    return new B();
+  }
+
+  implicit A FromB(B other)
+  {
+    Console.WriteLine("A:B->A");
+    return new();
+  }
+  
+}
+
+class B
+{
+}

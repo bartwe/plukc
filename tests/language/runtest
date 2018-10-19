@@ -1,0 +1,20 @@
+#!/bin/bash
+cd $1
+echo "Test: $1"
+. commandline < input > output.out 2> output.err
+diff --strip-trailing-cr output.err expected.err
+if [ ! $? -eq 0 ]; then
+ echo "FAILURE: $1" 
+ rm output.out
+ rm output.err
+ exit 1
+fi
+diff --strip-trailing-cr output.out expected.out
+if [ ! $? -eq 0 ]; then
+ echo "FAILURE: $1"
+ rm output.out
+ rm output.err
+ exit 1
+fi
+rm output.out
+rm output.err

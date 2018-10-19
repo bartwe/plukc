@@ -1,0 +1,29 @@
+class test.Int : pluk.test.Application
+{
+	override void Main()
+	{
+		int a = 1;
+		int b = 2;
+		True(a < b);
+		True(b > a);
+		False(a > b);
+		False(b < a);
+		True(1 == 1);
+		False(1 != 1);
+		True(1 != 2);
+		True((1+1) == 2);
+		True((3-1) == 2);
+		True(1 >= 1);
+		True(2 >= 1);
+		True(1 <= 1);
+		True(1 <= 2);
+		True(2 << 4 == 32);
+		True(3 * 5 == 15);
+		True(-3 == (0 - 3));
+		True(-3 == -(3));
+		True(0_255 == 0xff);
+		True(0x7a4 == 0y011110100100);
+		True(0x7a4 == 0c3644);
+		True(-1 == 0xffffffff); //assumes integer, and one complements
+	}
+}

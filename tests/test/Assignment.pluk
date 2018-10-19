@@ -1,0 +1,10 @@
+class test.Assignment : pluk.test.Application
+{
+  override void Main()
+  {
+      int a = 1;
+      True(a == 1);
+      int b = a = 2;
+      True(b == 2);
+  }
+}

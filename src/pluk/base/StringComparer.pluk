@@ -1,0 +1,51 @@
+class pluk.base.StringComparer
+{
+  Comparator<string>? ordinal;
+  Comparator<string>? ordinalIgnoreCase;
+  
+  static EqualityComparer<string> Ordinal
+  {
+    get
+    {
+      if (!?ordinal)
+        ordinal = new StringComparatorOrdinal();
+      return ~ordinal;
+    }
+  }
+
+  static EqualityComparer<string> OrdinalIgnoreCase
+  {
+    get
+    {
+      if (!?ordinalIgnoreCase)
+        ordinalIgnoreCase = new StringComparatorOrdinalIgnoreCase();
+      return ~ordinalIgnoreCase;
+    }
+  }
+}
+
+class pluk.base.StringComparatorOrdinal : EqualityComparer<string>
+{
+  override int HashCode(string v)
+  {
+	return v.HashCodeOrdinal();
+  }
+
+  override bool Equals(string left, string right)
+  {
+    return left.CompareOrdinal(right) == 0;
+  }
+}
+
+class pluk.base.StringComparatorOrdinalIgnoreCase : EqualityComparer<string>
+{
+  override int HashCode(string v)
+  {
+	return v.HashCodeOrdinalIgnoreCase();
+  }
+
+  override bool Equals(string left, string right)
+  {
+    return left.CompareOrdinalIgnoreCase(right) == 0;
+  }
+}

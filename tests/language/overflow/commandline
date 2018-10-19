@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk  -x:nf -a:v TestOverflow
+chmod +x ./TestOverflow
+./TestOverflow
+rm -f ./TestOverflow{.exe,}

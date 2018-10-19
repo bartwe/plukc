@@ -1,0 +1,50 @@
+class quicksort : Application
+{
+  static void Swap(Array<int> a, int i, int j)
+  {
+    var temp = a[i];
+    a[i] = a[j];
+    a[j] = temp;
+  }
+
+  static void Quicksort(Array<int> a, int l, int r)
+  {
+    var m = a[(l+r) / 2];
+    var i = l;
+    int j = r;
+    while (i<=j)
+    {
+      while (a[i] < m)
+        i = i + 1;
+      while (a[j] > m)
+        j = j - 1;
+      if (i <= j)
+      {
+        Swap(a, i, j);
+        i = i + 1;
+        j = j - 1;
+      }
+    }
+    if (l < j)
+      Quicksort(a, l, j);
+    if (r > i)
+      Quicksort(a, i, r);
+  }
+  
+  static void Quicksort(Array<int> a)
+  {
+    Quicksort(a, 0, a.Length - 1);
+  }
+
+  override void Main()
+  {
+    Array<int> a = new(100000, 0);
+    for (var i in 0..a.Length)
+    {
+      a[i] = i * 3 / 2 + 1;
+      if (i % 3 == 0)
+        a[i] = -a[i];
+    }
+    Quicksort(a);
+  }
+}

@@ -1,0 +1,53 @@
+class pluk.io.Mutex
+{
+  int count = 0;
+  Fiber? current = null;
+  Waitable? waitable;
+  Disposable? leaveDisposable;
+  
+  this()
+  {
+    waitable = new CheckingWaitable(Check);
+    leaveDisposable = new CallbackDisposable(Leave);
+  }
+  
+  Disposable Enter()
+  {
+    if (!Check())
+    {
+      FiberProcessor.Yield(~waitable);
+      recur;
+    }
+    current = Fiber.CurrentFiber;
+    count = count + 1;
+    return ~leaveDisposable;
+  }
+  
+  void Leave()
+  {
+    if ((count == 0) || (!?current) || ((~current) != ~Fiber.CurrentFiber))
+      throw new Exception("Unmatched mutex leave.");
+    count = count - 1;
+    if (count == 0)
+      current = null;
+  }
+  
+  private bool Check()
+  {
+    return (!?current) || ((~current) == ~Fiber.CurrentFiber);
+  }
+}
+
+class CallbackDisposable: Disposable
+{
+  void() callback;
+  this(void() callback)
+  {
+    this.callback = callback;
+  }
+  
+  override void Dispose()
+  {
+    callback();
+  }
+}

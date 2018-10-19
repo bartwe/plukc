@@ -1,0 +1,46 @@
+import pluk.io;
+
+class pluk.tag.BinaryFormat
+{
+  Array<byte> intBuffer = new(1, Byte.FromInt(0));
+  private this()
+  {
+  }
+  
+  static Tag Read(DataIStream stream)
+  {
+    var name = stream.ReadString();
+    Tag result = new Tag(name); 
+    result.Data = stream.ReadString();
+    var attrCount = stream.ReadInteger();
+    with (result.Attributes)
+      while (attrCount > 0)
+      {
+        Add(stream.ReadString(), stream.ReadString());
+        attrCount = attrCount - 1;
+      }
+    var childCount = stream.ReadInteger();
+    with (result.Children)
+      while (childCount > 0)
+      {
+        Add(Read(stream));
+        childCount = childCount - 1;
+      }
+    return result;
+  }
+  
+  static void Write(DataOStream stream, Tag value)
+  {
+    stream.WriteString(value.Name);
+    stream.WriteString(value.Data);
+    stream.WriteInteger(value.Attributes.Count);
+    for (var kv in value.Attributes)
+    {
+      stream.WriteString(kv.Key);
+      stream.WriteString(kv.Value);
+    }
+    stream.WriteInteger(value.Children.Count);
+    for (var c in value.Children)
+      Write(stream, c);
+  }
+}

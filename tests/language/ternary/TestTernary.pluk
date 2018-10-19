@@ -1,0 +1,10 @@
+class TestTernary : Application
+{
+  override void Main()
+  {
+    WriteLine(true?"hello":"goodbye");
+    WriteLine(false?"world":"space");
+//    var x = true?"hi":1;
+    Object y = false?"bye":2;
+  }
+}

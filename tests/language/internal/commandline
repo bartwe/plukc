@@ -1,0 +1,2 @@
+#!/bin/bash
+../../../scripts/lpuk -x:nf TestInternal a/X.pluk a/Y.pluk b/Z.pluk

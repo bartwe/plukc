@@ -1,0 +1,40 @@
+class MC : Application
+{
+  override void Main()
+  {
+    A a = new();
+    WriteLine(""+a.a());
+    WriteLine(""+a.b());
+    WriteLine(""+a.c());
+  }
+}
+
+class A : B, C
+{
+  private int x = 3;
+  
+  public int a()
+  {
+    return x;
+  } 
+}
+
+class B
+{
+  private int x = 2;
+  
+  public int b()
+  {
+    return x;
+  } 
+}
+
+class C
+{
+  private int x = 1;
+  
+  public int c()
+  {
+    return x;
+  } 
+}

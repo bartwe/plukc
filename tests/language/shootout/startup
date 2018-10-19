@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -f output
+rm shootout.startup.exe
+rm shootout.startup.dbg
+pluk -ndp -p .. shootout.startup
+./shootout.startup > output
+diff output startup-output.txt

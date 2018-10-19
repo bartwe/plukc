@@ -1,0 +1,97 @@
+class pluk.base.Fiber : Disposable
+{
+  Object? stack;
+  static Fiber? current;
+  void(Fiber)? entryPoint;
+  bool terminated = false;
+  Exception? error = null;
+  bool stackRegistered = false;
+ 
+  static Fiber? CurrentFiber { get { return current; } }
+  static bool IsFiber { get { return ?current; } }
+  bool Terminated { get { return terminated; } } 
+  Exception? Error { get { return error; } }
+  
+  this(void() entryPoint)
+    : this(64_000, (fiber) => { entryPoint(); })
+  {
+  }
+  
+  this(int stackSize, void(Fiber) entryPoint)
+  {
+    if (stackSize <= 256)
+      throw new ArgumentException("stackSize");
+    this.entryPoint = entryPoint;
+    Init(stackSize, EntryPoint);
+    RegisterStack();
+    stackRegistered = true;
+  }
+  
+  void Yield()
+  {
+    if ((!?current) || (this != ~current))
+      throw new InvalidOperationException("Can only yield the current fiber.");
+    if (Terminated)
+      throw new InvalidOperationException("Fiber has terminated.");
+    SwitchToMain();
+    current = this;
+  }
+  
+  bool Invoke()
+  {
+// is this true ?
+// unittests needed
+//    if (?current)
+//      throw new InvalidOperationException("A fiber cannot invoke another fiber.");
+    if (Terminated)
+      throw new InvalidOperationException("Fiber has terminated.");
+    var currentFiber = current;
+    SwitchToFiber();
+    current = currentFiber;
+    if (terminated)
+    {
+      entryPoint = null;
+      stack = null;
+      return false;
+    }
+    return true;
+  }
+
+  void SwitchTo()
+  {
+    Invoke();
+  }
+
+  override void Dispose()
+  {
+    if (?current)
+      throw new InvalidOperationException("A fiber cannot dispose another fiber.");
+    if (!terminated)
+      throw new InvalidOperationException("Cannot dispose an uncompleted fiber.");
+    stackRegistered = false;
+  }
+
+  void EntryPoint()
+  {
+    current = this;
+    try
+    {
+      (~entryPoint)(this);
+    }
+    catch (Exception e)
+    {
+      Console.WriteLine("Exception occured: "+e);
+      error = e;
+    }
+    terminated = true;
+    UnregisterStack();
+    stackRegistered = false;
+    SwitchToMain();
+  }
+  
+  private extern void Init(int stackSize, void() entrypoint);
+  private extern void SwitchToMain();
+  private extern void SwitchToFiber();
+  private extern void RegisterStack();
+  private extern void UnregisterStack();
+}

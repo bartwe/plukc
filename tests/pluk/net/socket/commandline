@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../../scripts/lpuk socket
+chmod +x ./socket
+./socket
+rm -f ./socket{.exe,}

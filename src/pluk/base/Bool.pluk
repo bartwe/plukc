@@ -1,0 +1,25 @@
+class pluk.base.Bool
+{
+	extern bool OperatorNot();
+	extern bool OperatorAnd(bool value);
+	extern bool OperatorOr(bool value);
+	extern bool OperatorEquals(bool value);
+	extern bool OperatorNotEquals(bool value);
+	
+	override string ToString()
+	{
+		if (this)
+			return "true";
+		else
+			return "false";
+	}
+	
+	static bool Parse(string text)
+	{
+	  if ((text == "true") || (text == "True"))
+	    return true;
+	  if ((text == "false") || (text == "False"))
+	    return false;
+	  throw new Exception(text);
+	}
+}

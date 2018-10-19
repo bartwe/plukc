@@ -1,0 +1,17 @@
+public class pluk.base.ObjectEqualityComparer<T> : EqualityComparer<T>
+{
+    public override int HashCode(T x)
+	{
+        if (!?x)
+            return 0;
+		return (~x).HashCode();
+	}
+	
+	public override bool Equals(T x, T y)
+	{
+        if (?x && ?y)
+            return ~x == ~y;
+        return ?x == ?y;
+	}
+}
+

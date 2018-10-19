@@ -1,0 +1,7 @@
+class pluk.base.OverflowException: Exception
+{
+  this()
+    : Exception()
+  {
+  }
+}

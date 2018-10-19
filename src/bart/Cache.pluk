@@ -1,0 +1,29 @@
+class Cache<T, U>
+{
+	private Dict<T, U> cache = new();
+	private U(T) function;
+
+	private this(U(T) function)
+	{
+		this.function = function;
+	}
+
+	private U retrieve(T key)
+	{
+		Maybe<U> t = cache.getIfContains(key);
+		if (t.nothing())
+		{
+			U result = function(key);
+			cache[key] = result;
+			return result;
+		}
+		else
+			return t.value();
+	}
+
+	public static U(T) wrap(U(T) function)
+	{
+		Cache<T, U> result = new(function);
+		return result.retrieve;
+	}
+}

@@ -1,0 +1,57 @@
+class pluk.io.Processor
+{
+  Stack<Processable> active = new();
+  Stack<Processable> fresh = new();
+  Stack<Processable> idle = new();
+  
+  void Invoke(Waitable waitable, <void()> work)
+  {
+    fresh.Push(new Processable(waitable, work));
+  }
+  
+  void Process()
+  {
+    Stack<Processable> cache = new();
+    List<Waitable> temp = new();
+    int skipCount = 0;
+    while (!active.IsEmpty || !fresh.IsEmpty || !idle.IsEmpty)
+    {
+      while (!fresh.IsEmpty)
+      {
+        var item = fresh.Pop();
+        if (item.waitable.Test())
+          active.Push(item);
+        else
+          idle.Push(item);
+        skipCount = skipCount + 1;
+      }
+      while (!active.IsEmpty)
+      {
+        var item = active.Pop();
+        item.invokable();
+      }
+      if (fresh.IsEmpty || (skipCount >= idle.Count))
+      {
+        skipCount = 0;
+        while (!idle.IsEmpty)
+        {
+          var item = idle.Pop();
+          if (item.waitable.Test())
+            active.Push(item);
+          else
+            cache.Push(item);
+        }
+        var t = idle;
+        idle = cache;
+        cache = t;
+        if (active.IsEmpty && fresh.IsEmpty)
+        {  
+          for (var item in idle)
+            temp.Add(item.waitable);
+          Waitable.WaitFor(temp);
+          temp.Clear();
+        }
+      }
+    }
+  }
+}

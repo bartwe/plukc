@@ -1,0 +1,34 @@
+class TestAsIs : Application
+{
+  override void Main()
+  {
+    WriteLine("a");
+    bool a = true;
+    WriteLine("b");
+    Object? b = a as Object;
+    WriteLine(""+(a is Object).ToString());
+    WriteLine(""+(?a).ToString());
+    WriteLine("c");
+    WriteLine(""+(a is bool).ToString());
+    bool c = cast<bool>(b);
+    bool? d = b as bool;
+    WriteLine(""+(c is bool).ToString());
+    WriteLine(""+(d is bool).ToString());
+    WriteLine(""+(c).ToString());
+    WriteLine(""+(~d).ToString());
+    WriteLine("d");
+    int? ed = b as int;
+    WriteLine(""+(b is int).ToString());
+    var ax = ed;
+    var bx = (?ax);
+    if (bx)
+      WriteLine("bc");
+    WriteLine(""+(?ed).ToString());
+    if (c)
+      WriteLine("f");
+    if (!c)
+      WriteLine("g");
+    WriteLine(c.ToString());
+    WriteLine("e");
+  }
+}

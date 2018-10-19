@@ -1,0 +1,2 @@
+#!/bin/sh
+exec mono $pwd/dotnet/pluk.exe $MONO_EXTRA_ARGS -ndp -p . -p $pwd/src "$@"

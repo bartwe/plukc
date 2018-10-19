@@ -1,0 +1,143 @@
+class pluk.io.BinaryIStream : IStream
+{
+  IStream stream;
+  Array<Byte> intBuffer = new(4, Byte.FromInt(0));
+  
+  this(IStream stream)
+  {
+    this.stream = stream;
+  }
+
+  int ReadInteger1B()
+  {
+    int result =0;
+    if (Read(intBuffer, 0, 1, 1) != 1)
+      throw new IOException("Eof reached unexpectedly.");
+    result = intBuffer[0].ToInt();
+    return result;
+  }
+
+  int ReadIntegerBE4B()
+  {
+    int result =0;
+    if (Read(intBuffer, 0, 4, 4) != 4)
+      throw new IOException("Eof reached unexpectedly.");
+    result = intBuffer[0].ToInt();
+    result = (result << 8) + intBuffer[1].ToInt();
+    result = (result << 8) + intBuffer[2].ToInt();
+    result = (result << 8) + intBuffer[3].ToInt();
+    return result;
+  }
+
+  int ReadIntegerBE2B()
+  {
+    int result =0;
+    if (Read(intBuffer, 0, 2, 2) != 2)
+      throw new IOException("Eof reached unexpectedly.");
+    result = intBuffer[0].ToInt();
+    result = (result << 8) + intBuffer[1].ToInt();
+    return result;
+  }
+
+  string ReadStringLPBE4B()
+  {
+    var length = ReadIntegerBE4B();
+    if (length == 0)
+      return "";
+    Array<byte> buffer = new(length, Byte.FromInt(0));
+    if (Read(buffer, 0, length, length) != length)
+      throw new IOException("Eof reached unexpectedly.");
+    return Utf8Encoding.StringFromByteArray(buffer, 0, length);
+  }
+  
+  string ReadStringLF()
+  {
+    List<byte> buffer = new();
+    while (true)
+    {
+  		if (Read(intBuffer, 0, 1, 1) != 1)
+  		{
+  		  if (buffer.Count == 0)
+  	  		throw new IOException("Eof reached unexpectedly.");
+  	  	break;
+	    }
+		  if (intBuffer[0].ToInt() == 0xa)
+		    break;
+  		buffer.Add(intBuffer[0]);
+	  }
+    return Utf8Encoding.StringFromByteArray(buffer.ToArray(), 0, buffer.Count);
+  }
+  
+  string ReadStringCRLF()
+  {
+    List<byte> buffer = new();
+    while (true)
+    {
+  		if (Read(intBuffer, 0, 1, 1) != 1)
+  		{
+  		  if (buffer.Count == 0)
+  	  		throw new IOException("Eof reached unexpectedly.");
+  	  	break;
+	    }
+		  if (intBuffer[0].ToInt() == 0xa)
+		    break;
+		  if (intBuffer[0].ToInt() != 13)
+    		buffer.Add(intBuffer[0]);
+	  }
+    return Utf8Encoding.StringFromByteArray(buffer.ToArray(), 0, buffer.Count);
+  }
+  
+  string ReadFileAsString()
+  {
+    List<byte> buffer = new();
+    while (true)
+    {
+  		if (Read(intBuffer, 0, 1, 1) != 1)
+  	  	break;
+  		buffer.Add(intBuffer[0]);
+	  }
+    return Utf8Encoding.StringFromByteArray(buffer.ToArray(), 0, buffer.Count);
+  }
+  
+  string ReadStringChunkedEncoding()
+  {
+    List<byte> buffer = new();
+    while (true)
+    {
+      var l = ReadStringCRLF();
+      var len = int.Parse(l, 16);
+      if (len == 0)
+        break;
+      for(in 0..len)
+      {
+    		if (Read(intBuffer, 0, 1, 1) != 1)
+    	  	break;
+        buffer.Add(intBuffer[0]);
+      }
+      l = ReadStringCRLF();
+      if (l != "")
+        throw new Exception("Expected empty.");
+    }
+    return Utf8Encoding.StringFromByteArray(buffer.ToArray(), 0, buffer.Count);
+  }
+  
+  override int Read(Array<Byte> buffer, int offset, int length, int limit)
+  {
+    return stream.Read(buffer, offset, length, limit);
+  }
+  
+  override void Close()
+  {
+    stream.Close();
+  }
+  
+  override Waitable WaitableForRead()
+  {
+    return stream.WaitableForRead();
+  }
+  
+  override void Dispose()
+  {
+    stream.Dispose();
+  }
+}

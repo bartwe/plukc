@@ -1,0 +1,72 @@
+class pluk.base.Long : Immutable
+{
+  int low;
+  int high;
+ 
+	Long OperatorAdd(Long addend)
+	{
+	  return new(low + addend.low);
+	}
+	
+	Long OperatorSubtract(Long subtractend)
+	{ throw new Exception(); }
+	Long OperatorMultiply(Long factor)
+	{ throw new Exception(); }
+	Long OperatorDivide(Long factor)
+	{ throw new Exception(); }
+	Long OperatorModulo(Long factor)
+	{ throw new Exception(); }
+	Long OperatorNegate()
+	{ throw new Exception(); }
+	bool OperatorGreaterThan(Long other)
+	{ throw new Exception(); }
+  bool OperatorLessThan(Long other)
+	{ throw new Exception(); }
+  bool OperatorGreaterEquals(Long other)
+	{ throw new Exception(); }
+  bool OperatorLessEquals(Long other)
+	{ throw new Exception(); }
+  bool OperatorEquals(Long other)
+	{ throw new Exception(); }
+  bool OperatorNotEquals(Long other)
+	{ throw new Exception(); }
+  Long OperatorLeft(Long count)
+	{ throw new Exception(); }
+  Long OperatorRight(Long count)
+	{ throw new Exception(); }
+  override string ToString()
+	{ throw new Exception(); }
+  string ToHexString()
+	{ throw new Exception(); }
+
+  internal this() { low = 0; high = 0;}
+  internal this(int value) { low = value; high = 0;}
+
+	Range<Long> OperatorRange(Long to)
+	{
+		if (to >= this)
+			return RangeWithStep(this, to, 1);
+		else
+			return RangeWithStep(this, to, -1);
+	}
+
+	static Range<Long> Range(Long from, Long to)
+	{
+		return RangeWithStep(from, to, 1);
+	}
+
+	static Range<Long> RangeWithStep(Long from, Long to, Long step)
+	{
+		return new AdditiveRange<Long>(from, to, step);
+	}
+
+	static Long Parse(string value)
+	{
+	  return FromInt(Int.Parse(value));
+	}
+	
+	implicit Long FromInt(int value)
+	{
+	  return new(value);
+	}
+}

@@ -1,0 +1,14 @@
+class TestWith : Application
+{
+  int a = 1;
+  override void Main()
+  {
+      WriteLine(a.ToString());
+      int a = 2;
+      WriteLine(a.ToString());
+      with (this)
+      {
+        WriteLine(a.ToString());
+      }
+  }
+}

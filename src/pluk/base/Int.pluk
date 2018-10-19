@@ -1,0 +1,72 @@
+class pluk.base.Int : Immutable
+{
+	extern int OperatorAdd(int addend);
+	extern int OperatorSubtract(int subtractend);
+	extern int OperatorMultiply(int factor);
+	extern int OperatorDivide(int factor);
+	extern int OperatorModulo(int factor);
+	extern int OperatorNegate();
+	extern bool OperatorGreaterThan(int other);
+	extern bool OperatorLessThan(int other);
+	extern bool OperatorGreaterEquals(int other);
+	extern bool OperatorLessEquals(int other);
+	extern bool OperatorEquals(int other);
+	extern bool OperatorNotEquals(int other);
+	extern int OperatorLeft(int count);
+	extern int OperatorRight(int count);
+	extern override string ToString();
+	extern string ToHexString();
+	extern int Pow(int power);
+	static private extern int GetMaxValue();
+	static private extern int GetMinValue();
+	
+	static int MaxValue { get { return GetMaxValue(); } }
+	static int MinValue { get { return GetMinValue(); } }
+
+  internal this() {}
+  
+	Range<int> OperatorRange(int to)
+	{
+		if (to >= this)
+			return RangeWithStep(this, to, 1);
+		else
+			return RangeWithStep(this, to, -1);
+	}
+
+	static Range<int> Range(int from, int to)
+	{
+		return RangeWithStep(from, to, 1);
+	}
+	
+	static Range<int> RangeWithStep(int from, int to, int step)
+	{
+		return new AdditiveRange<int>(from, to, step);
+	}
+
+	static int Parse(string value)
+	{
+	  var r = InnerParse(value, 10);
+	  if (!?r)
+	    throw new Exception("Failed to parse: "+value);
+	  return ~r;
+	}
+	
+	static int Parse(string value, int base)
+	{
+	  var r = InnerParse(value, base);
+	  if (!?r)
+	    throw new Exception("Failed to parse: "+value);
+	  return ~r;
+	}
+	
+	string ToHexString(int padding)
+	{
+	  return ToHexString().PadLeft("0", padding);
+	}
+	
+	private static extern int? InnerParse(string value, int base);
+
+	override int HashCode() {
+		return this;
+	}
+}

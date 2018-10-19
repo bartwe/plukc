@@ -1,0 +1,36 @@
+class pluk.base.Maybe<T>
+{
+  bool nothing;
+  T? value;
+  
+  this()
+  {
+    nothing = true;
+  }
+  
+  this(T value)
+  {
+    nothing = false;
+    this.value = value;
+  }  
+  
+  bool Nothing { get { return nothing; } }
+  bool HasValue { get { return !nothing; } }
+  
+  T Value
+  {
+    get
+    {
+      if (nothing)
+        throw new Exception();
+      return ~~value;
+    }
+  }
+  
+  T ValueOrDefault(T default)
+  {
+    if (nothing)
+      return default;
+    return ~~value;
+  }
+}

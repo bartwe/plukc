@@ -1,0 +1,105 @@
+class pluk.base.Array<T> : Indexable<int, T>, Iterable<T>
+{
+	int buffer;
+	int length;
+	
+	this(int length, T initialValue)
+	{
+	  if (length < 0)
+	    throw new ArgumentOutOfRangeException("length");
+		this.length = length;
+		buffer = 0;
+		Alloc(length, initialValue);
+	}
+	
+	this(Collection<T> source)
+	{
+		this.length = source.Count;
+		buffer = 0;
+		Alloc(length, null);
+		int i = 0;
+		for (var element in source)
+		{
+      this[i] = element;		  
+		  i = i + 1;
+		}  	  
+		if (i != length)
+		  throw new ArgumentOutOfRangeException("source");
+	}
+	
+	int Length { get { return length; } }
+	int Count  { get { return length; } }
+	
+	override T OperatorGetIndex(int index)
+	{
+	  if ((index < 0) || (index >= length))
+	    throw new ArgumentOutOfRangeException("index");
+	  return InnerOperatorGetIndex(index);
+	}
+	
+	void OperatorSetIndex(int index, T value)
+	{
+	  if ((index < 0) || (index >= length))
+	    throw new ArgumentOutOfRangeException("index");
+	  return InnerOperatorSetIndex(index, value);
+	}
+	
+	private extern T InnerOperatorGetIndex(int index);
+	private extern void InnerOperatorSetIndex(int index, T value);
+	
+	override Iterable<int> Indices { get { return <int>.RangeWithStep(0, length, 1); } }
+	
+	override Iterator<T> CreateIterator()
+	{
+	  return new ArrayIterator<T>(this);
+	}
+
+	private extern void Alloc(int length, T? initialValue);
+	
+	public static void Copy(Array<T> source, Array<T> target, int sourceOffset, int targetOffset, int length)
+	{
+	  if ((source.Length < sourceOffset + length)||(sourceOffset < 0))
+	    throw new ArgumentOutOfRangeException("sourceOffset ("+source.Length+":"+target.Length+":"+sourceOffset+":"+targetOffset+":"+length);
+	  if ((target.Length < targetOffset + length)||(targetOffset < 0))
+	    throw new ArgumentOutOfRangeException("targetOffset");
+	  if (length < 0)
+	    throw new ArgumentOutOfRangeException("length");
+	  int i = 0;
+	  while (i < length)
+	  {
+	    target[i+targetOffset] = source[i+sourceOffset];
+	    i = i + 1;
+	  }
+	}
+	
+//sort
+//unique
+//join extern
+}
+
+internal class pluk.base.ArrayIterator<T>: Iterator<T>
+{
+  int index = -1;
+  Array<T> array;
+  
+  this(Array<T> array)
+  {
+    this.array = array;
+  }
+  
+  override bool Move()
+  {
+    index = index + 1;
+    if (index >= array.Length)
+    {
+      index = array.Length - 1;
+      return false;
+    }
+    return true;    
+  }  
+  
+  override T Value()
+  {
+    return array[index];
+  }
+}

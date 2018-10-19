@@ -1,0 +1,5 @@
+abstract class pluk.base.Iterator<T>
+{
+	public abstract bool Move();
+	public abstract T Value();
+}

@@ -1,0 +1,7 @@
+class test.Console : Application
+{
+	override void Main()
+	{
+		WriteLine("OK");
+	}
+}

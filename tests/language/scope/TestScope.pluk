@@ -1,0 +1,32 @@
+
+class TestScope : Application
+{
+  override void Main()
+  {
+    scope(var a = new A())
+    {
+      scope(var b = a)
+      {
+      }
+    }
+    try
+    {
+      scope(var a = new A())
+      {
+        throw new Exception("test");
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.Message);
+    }
+  }
+}
+
+class A : Disposable
+{
+  override void Dispose()
+  {
+    Console.WriteLine("disposed");
+  }
+}

@@ -1,0 +1,36 @@
+class test.Property : pluk.test.Application
+{
+  int a = 0;
+  public int A { get { return a;} set { a = value; } }
+  public int B { get; set; } = 4;
+  public int C { get { return A; } set { A = value; } }
+  
+  {
+    C =  13;
+  }
+
+  override void Main()
+  {
+    True(C == 13);
+    True(A == 13);
+    a = 1;
+    int b = A;
+    True( a == 1);
+    True(A == 1);
+    True(b == 1);
+    a = 2;
+    b = A;
+    True(A == 2);
+    True(a == 2);
+    True(b == 2);
+    A = 3;
+    b = A;
+    True(A == 3);
+    True(a == 3);
+    True(b == 3);
+    
+    True(B == 4);
+    B = 2;
+    True(B == 2);
+  }
+}

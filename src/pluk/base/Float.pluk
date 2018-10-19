@@ -1,0 +1,60 @@
+class pluk.base.Float : Immutable
+{
+	extern float OperatorAdd(float addend);
+	extern float OperatorSubtract(float subtractend);
+	extern float OperatorMultiply(float factor);
+	extern float OperatorDivide(float factor);
+	extern float OperatorNegate();
+	extern bool OperatorGreaterThan(float other);
+	extern bool OperatorLessThan(float other);
+	extern bool OperatorGreaterEquals(float other);
+	extern bool OperatorLessEquals(float other);
+	extern override string ToString();
+
+  internal this() {}
+  
+	Range<float> OperatorRange(float to)
+	{
+		if (to >= this)
+			return RangeWithStep(this, to, 1);
+		else
+			return RangeWithStep(this, to, -1);
+	}
+
+	static Range<float> Range(float from, float to)
+	{
+		return RangeWithStep(from, to, 1);
+	}
+	
+	static Range<float> RangeWithStep(float from, float to, float step)
+	{
+		return new AdditiveRange<float>(from, to, step);
+	}
+
+	static float Parse(string value)
+	{
+	  var r = InnerParse(value);
+	  if (!?r)
+	    throw new Exception("Failed to parse: "+value);
+	  return ~r;
+	}
+	
+	bool IsNan { get { return InnerIsNan(this); } }
+	
+	private static extern bool InnerIsNan(float value);
+	
+  private static extern float? InnerParse(string value);
+
+  implicit extern float FromInt(int value);
+
+  int ToInt()
+  {
+    if ((this < float.FromInt(int.MinValue))||(this > float.FromInt(int.MaxValue)))
+      throw new ArgumentOutOfRangeException("out of range");
+    if (IsNan)
+      throw new ArgumentOutOfRangeException("not a number");
+    return InnerToInt();
+  }
+
+  private extern int InnerToInt();
+}

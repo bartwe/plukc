@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p . TestUnicode
+chmod +x ./TestUnicode
+./TestUnicode
+rm -f ./TestUnicode{.exe,}

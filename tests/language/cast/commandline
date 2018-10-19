@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk TestCast
+chmod +x ./TestCast
+./TestCast
+rm -f ./TestCast{.exe,}

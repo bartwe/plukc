@@ -1,0 +1,7 @@
+class pluk.base.ArgumentNullException : pluk.base.ArgumentException
+{
+  this(string argument)
+    : ArgumentException(argument)
+  {
+  }
+}

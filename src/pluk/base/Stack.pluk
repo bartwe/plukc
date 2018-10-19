@@ -1,0 +1,39 @@
+class pluk.base.Stack<T> : Iterable<T>
+{
+  List<T> data = new();
+  
+  void Push(T value)
+  {
+    data.AddLast(value);
+  }
+  
+  T Pop()
+  {
+    if (IsEmpty)
+      throw new InvalidOperationException("Stack is empty.");
+    return data.RemoveLast();
+  }
+  
+  T Peek()
+  {
+    if (IsEmpty)
+      throw new InvalidOperationException("Stack is empty.");
+    return data.Last;
+  }
+  
+  void Clear()
+  {
+    data.Clear();
+  }
+  
+  int Count
+  { get { return data.Count; } }
+  
+  bool IsEmpty
+  { get { return data.IsEmpty; } }
+  
+  override Iterator<T> CreateIterator()
+  {
+    return data.CreateIterator();
+  }
+}

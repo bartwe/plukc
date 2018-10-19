@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk precedence
+chmod +x ./precedence
+./precedence
+rm -f ./precedence{.exe,}

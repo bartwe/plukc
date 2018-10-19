@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/local/lib/pluk/pluk.exe -p:h "E:/cygwin/usr/local/lib/pluk/src" "$@"

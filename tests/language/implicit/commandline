@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk TestImplicit
+chmod +x ./TestImplicit
+./TestImplicit
+rm -f ./TestImplicit{.exe,}

@@ -1,0 +1,7 @@
+﻿class TestUnicode : Application
+{
+	override void Main()
+	{
+		Console.WriteLine("♛♏Ὦद्रिसु好");
+	}
+}

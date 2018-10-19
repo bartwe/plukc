@@ -1,0 +1,14 @@
+class pluk.base.Pair<TA, TB>
+{
+  TA a;
+  TB b;
+  
+  TA A { get { return a; } }
+  TB B { get { return b; } }
+  
+  this(TA a, TB b)
+  {
+    this.a = a;
+    this.b = b;
+  }
+}

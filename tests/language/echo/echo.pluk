@@ -1,0 +1,22 @@
+class echo : Application
+{
+  override void Main()
+  {
+    bool writeNewline = true;
+    string sep = "";
+    bool didFirst = false;
+    for (var arg in Arguments.Skip(1))
+    {
+      if (!didFirst && arg == "-n")
+        writeNewline = false;
+      else
+      {
+        Write(sep + arg);
+        sep = " ";
+      }
+      didFirst = true;  
+    }
+    if (writeNewline)
+      WriteLine("");
+  }
+}

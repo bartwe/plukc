@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk lambda
+chmod +x ./lambda
+./lambda
+rm -f ./lambda{.exe,}

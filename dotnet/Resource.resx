@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BodyNotCompatibleWithModifier" xml:space="preserve">
+    <value>Statement body not compatible with modifiers.</value>
+  </data>
+  <data name="CannotUseExpressionOfTypeAsFunction" xml:space="preserve">
+    <value>Cannot use expression of type '{0}' as a function.</value>
+  </data>
+  <data name="CanOnlyUseVarWithInitialization" xml:space="preserve">
+    <value>Can only use a 'var' declaration when the type can be inferred.</value>
+  </data>
+  <data name="ClassHasNoMain" xml:space="preserve">
+    <value>Class '{0}' does not seem to be a program.</value>
+  </data>
+  <data name="CompilerUsage" xml:space="preserve">
+    <value>{0} [-p PATH]... CLASS...</value>
+  </data>
+  <data name="DuplicateImport" xml:space="preserve">
+    <value>Duplicate import of namespace '{0}'.</value>
+  </data>
+  <data name="SlotModifierNotAllowed" xml:space="preserve">
+    <value>Modifier '{0}' is not allowed on a slot.</value>
+  </data>
+  <data name="FailedToResolveFieldExpression" xml:space="preserve">
+    <value>No field named '{0}' was found on type '{1}'.</value>
+  </data>
+  <data name="FunctionCallParameterCountMismatch" xml:space="preserve">
+    <value>Call '{0}' expected, found {1} count arguments.</value>
+  </data>
+  <data name="IncompatibleTypes" xml:space="preserve">
+    <value>Incompatible types, could not convert from '{1}' to '{0}'.</value>
+  </data>
+  <data name="LeftHandSideCannotBeAssignedTo" xml:space="preserve">
+    <value>Left expression cannot be assigned to.</value>
+  </data>
+  <data name="NoDefinitionForType" xml:space="preserve">
+    <value>No definition found for type: '{0}'.</value>
+  </data>
+  <data name="MethodIsAbstract" xml:space="preserve">
+    <value>Abstract method '{0}' not implemented by type '{1}'.</value>
+  </data>
+  <data name="RequireAssigned" xml:space="preserve">
+    <value>Require.Assigned</value>
+  </data>
+  <data name="RequireFalse" xml:space="preserve">
+    <value>Require.False</value>
+  </data>
+  <data name="RequireNotEmpty" xml:space="preserve">
+    <value>Require.NotEmpty</value>
+  </data>
+  <data name="RequireTrue" xml:space="preserve">
+    <value>Require.True</value>
+  </data>
+  <data name="RequireUnassigned" xml:space="preserve">
+    <value>Require.Unassigned</value>
+  </data>
+  <data name="TemplateParameterMismatch" xml:space="preserve">
+    <value>Template parameter mismatch '{0}' was found, expected '{1}'.</value>
+  </data>
+  <data name="TypeAlreadyDeclared" xml:space="preserve">
+    <value>Type already declared '{0}'.</value>
+  </data>
+  <data name="UnexpectedToken" xml:space="preserve">
+    <value>Unexpected token '{0}' was found, expected "{1}".</value>
+  </data>
+  <data name="CanOnlyCreateNewInstanceOfClass" xml:space="preserve">
+    <value>Cannot create new object of type '{0}'.</value>
+  </data>
+  <data name="VariableWithThatNameAlreadyDefined" xml:space="preserve">
+    <value>A variable with name '{0}' has already been defined.</value>
+  </data>
+  <data name="FailedToResolveVariable" xml:space="preserve">
+    <value>No variable named '{0}' was found.</value>
+  </data>
+  <data name="FieldWithNameAlreadyDefiniedOnClass" xml:space="preserve">
+    <value>A field with name '{0}' has already been defined.</value>
+  </data>
+  <data name="ReturnStatementNotAllowed" xml:space="preserve">
+    <value>A return statement is not allowed here.</value>
+  </data>
+  <data name="TypeOfExpressionUnclear" xml:space="preserve">
+    <value>Failed to infer the type of the expression from the context.</value>
+  </data>
+  <data name="TypeHasNoDefaultValue" xml:space="preserve">
+    <value>No default value for type '{0}'.</value>
+  </data>
+  <data name="CouldNotDetermineTypeOfForVar" xml:space="preserve">
+    <value>Could not determine type of var parameter.</value>
+  </data>
+  <data name="PropertyIsAbstract" xml:space="preserve">
+    <value>Property '{0}' on type '{1}' is abstract.</value>
+  </data>
+  <data name="ConflictingConstructor" xml:space="preserve">
+    <value>An confliciting or ambiguous constructor reference to "{1}", make explicit.</value>
+  </data>
+  <data name="ImplicitConstructor" xml:space="preserve">
+    <value>Failed to resolve implicit base construcor reference.</value>
+  </data>
+  <data name="ObjectNotFullyAssigned" xml:space="preserve">
+    <value>Object is not fully constructed, method calls on the object and passing 'this' is not allowed.</value>
+  </data>
+  <data name="VariableMightNotBeAssigned" xml:space="preserve">
+    <value>Variable '{0}' might not be assigned.</value>
+  </data>
+  <data name="UnusedVariable" xml:space="preserve">
+    <value>Variable '{0}' is unused.</value>
+  </data>
+  <data name="VariableAssignedButUnused" xml:space="preserve">
+    <value>Variable '{0}' has been assigned but never read.</value>
+  </data>
+  <data name="CannotAssignReadOnlyVar" xml:space="preserve">
+    <value>Variable '{0}' is read only and cannot be assigned.</value>
+  </data>
+  <data name="FieldNotAssigned" xml:space="preserve">
+    <value>Field  '{0}' has not been assigned.</value>
+  </data>
+  <data name="CannotUseATypeAsAValue" xml:space="preserve">
+    <value>Cannot use a type as a value.</value>
+  </data>
+  <data name="MissingMethodOverride" xml:space="preserve">
+    <value>Missing override keyword for method '{0}' on type '{1}'.</value>
+  </data>
+  <data name="MissingPropertyOverride" xml:space="preserve">
+    <value>Missing override keyword for property '{0}' on type '{1}'.</value>
+  </data>
+  <data name="MissingMethodOverrideTarget" xml:space="preserve">
+    <value>Method '{0}' on type '{1}' is marked as override, but no such method on inherited types.</value>
+  </data>
+  <data name="MissingPropertyOverrideTarget" xml:space="preserve">
+    <value>Property '{0}' on type '{1}' is marked as override, but no such property on inherited types.</value>
+  </data>
+  <data name="ExpressionHasNoEffect" xml:space="preserve">
+    <value>Expression has no effect.</value>
+  </data>
+  <data name="CanOnlyUseWithOnNotNullClassInstances" xml:space="preserve">
+    <value>Can only use the with statement on a value of a notnull class type.</value>
+  </data>
+  <data name="FailedToResolveStaticFieldExpression" xml:space="preserve">
+    <value>No static field named '{0}' was found on type '{1}'.</value>
+  </data>
+  <data name="CanOnlyUseScopeOnNotNullDisposable" xml:space="preserve">
+    <value>Can only use the scope statement on a value of a notnull class implementing Disposable.</value>
+  </data>
+  <data name="CannotCreateInstanceOfAbstractClass" xml:space="preserve">
+    <value>Cannot create instance of abstract class '{0}'.</value>
+  </data>
+  <data name="UnreachableCode" xml:space="preserve">
+    <value>Code is unreachable.</value>
+  </data>
+  <data name="NotAllCodePathsReturnAValue" xml:space="preserve">
+    <value>Not all codepaths return a value.</value>
+  </data>
+  <data name="UnsupportedJumpOutOfTry" xml:space="preserve">
+    <value>Jumping out of a try block is currently unsupported.</value>
+  </data>
+  <data name="NoEnclosingLoop" xml:space="preserve">
+    <value>No enclosing loop to leave.</value>
+  </data>
+  <data name="IfBranchIsEmpty" xml:space="preserve">
+    <value>If branch is empty.</value>
+  </data>
+  <data name="LoopStatementHasNoBody" xml:space="preserve">
+    <value>Loop statement has no body.</value>
+  </data>
+  <data name="AmbiguousConstructorReference" xml:space="preserve">
+    <value>Ambiguous constructor reference to '{0}'.</value>
+  </data>
+  <data name="NoMatchingConstructor" xml:space="preserve">
+    <value>No matching constructor found for '{0}'.</value>
+  </data>
+  <data name="AmbiguousMethodReference" xml:space="preserve">
+    <value>Ambiguous reference to method named '{0}'.</value>
+  </data>
+  <data name="NoMatchingMethod" xml:space="preserve">
+    <value>No matching method found named '{0}'</value>
+  </data>
+  <data name="FieldNameCollision" xml:space="preserve">
+    <value>Collision while inheriting a field named '{0}'.</value>
+  </data>
+  <data name="NoVisibleConstructor" xml:space="preserve">
+    <value>No visible constructor found for '{0}'.</value>
+  </data>
+  <data name="NoVisibleMethod" xml:space="preserve">
+    <value>No visible method found named '{0}'.</value>
+  </data>
+  <data name="FieldNotVisible" xml:space="preserve">
+    <value>Field '{0}' is not visible from this context.</value>
+  </data>
+  <data name="GetPropertyNotVisible" xml:space="preserve">
+    <value>Getter '{0}' is not visible from this context.</value>
+  </data>
+  <data name="MethodNotVisible" xml:space="preserve">
+    <value>No method named '{0}' is visible from this context.</value>
+  </data>
+  <data name="SetPropertyNotVisible" xml:space="preserve">
+    <value>Setter '{0}' is not visible from this context.</value>
+  </data>
+  <data name="FieldFromNullableType" xml:space="preserve">
+    <value>Type '{1}' is nullable and taking field '{0}' may cause an error.</value>
+  </data>
+  <data name="MethodOverrideReturnTypeMismatch" xml:space="preserve">
+    <value>Method '{0}' on type '{1}' is marked as override but returntype does not match.</value>
+  </data>
+  <data name="ObjectNotFullyAssignedConstructor" xml:space="preserve">
+    <value>Type '{0}' is not fully constructed, field '{1}' is not assigned.</value>
+  </data>
+  <data name="ImplicitFieldPropertyRequiresBothGetterAndSetter" xml:space="preserve">
+    <value>Implicit field property requires both getter and setter.</value>
+  </data>
+  <data name="NoMatchingConstructorSignature" xml:space="preserve">
+    <value>No matching constructor found for '{0}' with signature '{1}'</value>
+  </data>
+  <data name="NoMatchingMethodMultiple" xml:space="preserve">
+    <value>Argument mismatch on method named '{0}'.</value>
+  </data>
+  <data name="NoMatchingMethodOption" xml:space="preserve">
+    <value>Argument mismatch on method named '{0}', expected '{1}'.</value>
+  </data>
+</root>

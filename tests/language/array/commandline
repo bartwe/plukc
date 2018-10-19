@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p ../../ test.Array
+chmod +x ./test.Array
+./test.Array
+rm -f ./test.Array{.exe,}

@@ -1,0 +1,61 @@
+class pluk.io.FiberProcessor
+{
+  Processor processor = new();
+  
+  static FiberProcessor? instance;
+  
+  static FiberProcessor Instance
+  {
+    get
+    {
+      if (!?instance) 
+        instance = new ();
+      return ~instance; 
+    }
+  }
+  
+  private this()
+  {
+  }
+  
+  static void Fork(void() entryPoint)
+  {
+    Invoke(new Fiber(entryPoint));
+  }
+  
+  static void Invoke(Fiber fiber)
+  {
+    Instance.InnerInvoke(fiber);
+  }
+  
+  static void Yield(Waitable waitable)
+  {
+    Instance.InnerYield(waitable);
+  }
+  
+  private void InnerInvoke(Fiber fiber)
+  {
+    processor.Invoke(new ActiveWaitable(), fiber.SwitchTo);
+  }
+  
+  private void InnerYield(Waitable waitable)
+  {
+    if (!Fiber.IsFiber)
+      throw new Exception("It is only possible to Yield from a fiber");
+    var current = ~Fiber.CurrentFiber;
+    processor.Invoke(waitable, current.SwitchTo);
+    current.Yield();
+  }
+  
+  static void Process()
+  {
+    Instance.InnerProcess();
+  }
+  
+  private void InnerProcess()
+  {
+    if (Fiber.IsFiber)
+      throw new Exception("It is only possible to process fibers from something not a fiber.");
+    processor.Process();
+  }
+}

@@ -1,0 +1,54 @@
+class Unassigned : Application
+{
+  override void Main()
+  {
+    {
+      int b;
+      {
+        b =12;
+        while(false){
+          WriteLine(""+b);
+        }
+      }
+    }
+    {
+      A a;
+      scope (var i = new pluk.io.BufferStream())
+      {
+        a = new();
+      }
+      if (?a)
+        a = new();
+		}
+		{
+      A a;
+      {
+        a = new();
+      }
+      if (?a)
+        a = new();
+    }
+    {
+      A a;
+      {
+        while (false)
+        {
+          {
+            a = new();
+          }
+          if (?a)
+            a = new();
+        }
+      }
+    }
+		int b =2, c;
+		c = 3;
+		b = c;
+	  if (b == 2)
+	    WriteLine("wrong");
+  }
+}
+
+class A
+{
+}

@@ -1,0 +1,117 @@
+class pluk.io.AsyncBufferedStream : OStream
+{
+  Array<byte> buffer = new(4096, byte.FromInt(0));
+  int sendhead = 0;
+  int writehead = 0;
+  OStream stream;
+  bool closed = false;
+  bool writeThrough = false;
+  
+  bool WriteThrough { get { return writeThrough; } set { writeThrough = value; } }
+  
+  this(OStream stream)
+  {
+    this.stream = stream;
+  }
+  
+  override void Close()
+  {
+    closed = true;
+    stream.Close();
+  }
+  
+  override void Dispose()
+  {
+    if (!closed)
+      Close();
+  }
+  
+  override int Write(Array<Byte> source, int offset, int length, int limit)
+  {
+    if (closed)
+      throw new IOException("Stream is closed.");
+    if (limit <= 0)
+      throw new ArgumentException("limit");
+    if ((length < 0) || (length > limit))
+      throw new ArgumentException("length");
+    if ((offset < 0) || (offset+limit > buffer.Length))
+      throw new ArgumentException("offset");
+    var o = offset;
+    var le = length;
+    var li = limit;
+    int res = 0;
+    if (writeThrough)
+    {
+      if (sendhead != writehead)
+        FlushNb();
+      if (sendhead == writehead)
+        res = stream.Write(source, o, 0, li);
+      o = o + res;
+      le = le - res;
+      li = li - res;
+      if (le < 0) le = 0;
+    }
+    if (le > 0) // if the must read bytes are still not all send, put all offered bytes in the buffer
+    {
+      EnsureBuffer(li);
+      <Array<byte>>.Copy(source, buffer, o, writehead, li);
+      res = res + li;
+      writehead = writehead + li;
+    }
+    return res;
+  }
+  
+  void Flush()
+  {
+    if (sendhead != writehead)
+    {
+      var len = writehead - sendhead;
+      var res = stream.Write(buffer, sendhead, len, len);
+      sendhead = sendhead + res;
+    }
+  }
+  
+  bool FlushNb()
+  {
+    if (sendhead != writehead)
+    {
+      var len = writehead - sendhead;
+      var res = stream.Write(buffer, sendhead, 0, len);
+      sendhead = sendhead + res;
+    }
+    return sendhead == writehead;                        
+  }
+  
+  private void EnsureBuffer(int capacity)
+  {
+    if (sendhead == writehead)
+    {
+      sendhead = 0;
+      writehead = 0;
+    }
+    if ((buffer.Length - writehead) < capacity)
+    {
+      if ((buffer.Length + sendhead - writehead < capacity) || (capacity > buffer.Length / 2))
+      {
+        // buffer too small
+        var size = buffer.Length * 2;
+        var b = new Array<Byte>(size, Byte.FromInt(0));
+        <Array<Byte>>.Copy(buffer, b, sendhead, 0, writehead-sendhead);
+        writehead = writehead - sendhead;
+        sendhead = 0;
+        buffer = b;
+      }
+      else
+      {
+        <Array<Byte>>.Copy(buffer, buffer, sendhead, 0, writehead-sendhead);
+        writehead = writehead - sendhead;
+        sendhead = 0;
+      }
+    }
+  }
+  
+  override Waitable WaitableForWrite()
+  {
+    return stream.WaitableForWrite();
+  }
+}

@@ -1,0 +1,16 @@
+class TestEnum : Application
+{
+  override void Main()
+  {
+    A x;
+    x = A.Y;
+    Console.WriteLine(""+(x == A.X)+":"+(x == A.Y));
+        
+  }
+}
+
+enum A {
+
+  X, Y, Z
+}
+

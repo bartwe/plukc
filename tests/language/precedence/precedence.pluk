@@ -1,0 +1,18 @@
+class precedence : Application
+{
+  override void Main()
+  {
+      WriteLine((1+2+3+4).ToString());
+      WriteLine((1+2+3*4).ToString());
+      WriteLine((1+2*3+4).ToString());
+      WriteLine((1*2+3+4).ToString());
+      WriteLine((1*2+3*4).ToString());
+      WriteLine((1+2*3*4).ToString());
+      WriteLine((1*2*3+4).ToString());
+      WriteLine((1*2*3*4).ToString());
+      WriteLine(((1+2)*3+4).ToString());
+      WriteLine((1+(2*3)+4).ToString());
+      WriteLine((1*2*(3+4)).ToString());
+      WriteLine(((1*2)*(3+4)).ToString());
+  }
+}

@@ -1,0 +1,13 @@
+class shift : Application
+{
+  override void Main()
+  {
+    int i = 1;
+    
+    WriteLine("" + i);
+    WriteLine("" + (i << 2));
+    WriteLine("" + (i << 4 >> 1));
+    WriteLine("" + (i << 4 >> 2 < 2));
+    WriteLine("e");
+  }
+}

@@ -1,0 +1,189 @@
+class pluk.io.StreamReader : TextReader, IStream
+{
+  IStream stream;
+  StreamReaderBuffer buffer = new();
+  
+  this(IStream stream)
+  {
+    this.stream = stream;
+  }
+  
+  override string ReadLine()
+  {
+    var line = ReadLineOrEof();
+    if (!?line)
+      throw new IOException("End of Stream.");
+    return ~line;
+  }
+  
+  override string? ReadLineOrEof()
+  {
+    while (true)
+    {
+      var scan = buffer.ScanNewlineOrNull();
+      if (scan != 0)
+      {
+        return buffer.ReadString();
+      }
+      var count = buffer.Read(stream);
+      if (count == -1)
+      { 
+        if (buffer.EndOfBuffer)
+          return null;
+        return buffer.ReadString(); 
+      }
+    }
+  }
+  
+  override void Close()
+  {
+    stream.Close();
+  }
+  
+  override Waitable WaitableForRead()
+  {
+    if (buffer.EndOfBuffer)
+      return stream.WaitableForRead();
+    else
+      return new ActiveWaitable();
+  }
+  
+  override int Read(Array<Byte> target, int offset, int length, int limit)
+  {
+    var o = offset;
+    var len = length;
+    var lim = limit;
+    int res = -1;
+    if (!buffer.EndOfBuffer)
+    {
+      res = buffer.Read(target, offset, limit);
+      if (res == 0)
+        res = -1;
+      if (res > 0)
+      {
+        o = o + res;
+        len = len - res;
+        lim = lim - res;
+      }
+    }
+    if ((len > 0)||(res == -1))
+    {
+      var r = stream.Read(target, o, len, lim);
+      if (res == -1)
+        return r;
+      if (r == -1)
+        return res;
+      return res + r;
+    }
+    return res;
+  }
+}
+
+class pluk.base.StreamReaderBuffer
+{
+  int capacity = 4096;
+  int writehead = 0;
+  int readhead = 0;
+  int scanhead = 0;
+  Byte zero = Byte.FromInt(0);
+  
+  Byte newline = Byte.FromInt(10);
+  Byte cr = Byte.FromInt(13);
+  
+  Array<Byte> buffer = new(4096, Byte.FromInt(0));
+  
+  bool EndOfBuffer
+  {
+    get
+    {
+      return writehead == readhead;
+    }
+  }
+  
+  int Read(IStream stream)
+  {
+    EnsureBuffer();
+    int r = stream.Read(buffer, writehead, 1, capacity-writehead);
+    if (r > 0)
+      writehead = writehead + r;
+    return r;
+  }
+  
+  int ScanNewlineOrNull()
+  {
+    while (scanhead < writehead)
+    {
+      var cursor = buffer[scanhead];
+      scanhead = scanhead + 1;
+      if ((cursor == zero) || (cursor == newline))
+        return scanhead;
+    }
+    return 0;
+  }
+  
+  int Read(Array<byte> buffer, int offset, int length)
+  {
+    int result = length;
+    int l = writehead - readhead;
+    if (result > l)
+      result = l;
+    <Array<byte>>.Copy(this.buffer, buffer, readhead, offset, result);
+    readhead = readhead + result;
+    return result;
+  }
+  
+  string ReadString()
+  {
+    int len = scanhead - readhead;
+    if (len > 0)
+    {
+      var cursor = buffer[scanhead - 1];
+      if ((cursor == zero) || (cursor == newline))
+        len = len - 1;
+    }
+    var offset = readhead;
+    var length = len;
+    if ((length > 0)&&(buffer[offset] == cr))
+    {
+      offset = offset + 1;
+      length = length - 1;
+    }
+    if ((length > 0)&&(buffer[offset + length - 1 ] == cr))
+    {
+      length = length - 1;
+    }
+    var r = Utf8Encoding.StringFromByteArray(buffer, offset, length);
+    readhead = scanhead;
+    return r;
+  }
+  
+  private void EnsureBuffer()
+  {
+    if (capacity == writehead)
+    {
+      if (readhead == 0)
+      {
+        capacity = capacity * 2;
+        var b = new Array<Byte>(capacity, Byte.FromInt(0));
+        <Array<Byte>>.Copy(buffer, b, 0, 0, writehead);
+        buffer = b;
+      }
+      else
+      {
+        if (readhead == writehead)
+        {
+          readhead = 0;
+          writehead = 0;
+          scanhead = 0;
+        }
+        else
+        {
+          <Array<Byte>>.Copy(buffer, buffer, readhead, 0, writehead-readhead);
+          writehead = writehead - readhead;
+          scanhead = scanhead - readhead;
+          readhead = 0;
+        }
+      }
+    }  
+  }
+}

@@ -1,0 +1,33 @@
+class TestContinue : Application
+{
+  override void Main()
+  {
+    int i = 0;
+    
+    WriteLine("a");
+    while (true)
+    {
+      WriteLine("b");
+      i = i + 1;
+      if (i == 1)
+        continue;
+      WriteLine("c");
+      if (i == 3)
+        break;
+      WriteLine("d");
+    }
+    WriteLine("e");
+    WriteLine("a");
+    for (int j in 1..10)
+    {
+      WriteLine("b");
+      if (j == 1)
+        continue;
+      WriteLine("c");
+      if (j == 3)
+        break;
+      WriteLine("d");
+    }
+    WriteLine("e");
+  }
+}

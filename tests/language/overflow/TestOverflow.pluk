@@ -1,0 +1,75 @@
+class TestOverflow : Application
+{
+  override void Main()
+  {
+    try
+    {
+      int a = 1000_000;
+      while (true)
+      {
+        a = a + a;
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+    try
+    {
+      int a = -1000_000;
+      while (true)
+      {
+        a = a + a;
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+    try
+    {
+      int a = 1000_000;
+      while (true)
+      {
+        a = a * a;
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+    try
+    {
+      int a = -1000_000;
+      while (true)
+      {
+        a = a - -a;
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+    try
+    {
+      int a = 1000_000;
+      byte b = byte.FromInt(a);
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+    try
+    {
+      int a = 1000_000;
+      while (true)
+      {
+        a = a + a;
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine(e.ToString());
+    }
+  }
+}

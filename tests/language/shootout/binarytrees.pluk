@@ -1,0 +1,60 @@
+class shootout.binarytrees : Application
+{
+  void Main()
+  {
+    int minDepth = 4, n = 20, maxDepth = minDepth + 2;
+    if (Arguments.Count > 0)
+      n = <int>.Parse(Arguments[0]);
+    if (n > maxDepth)
+      maxDepth = n;
+    int stretchDepth = maxDepth + 1;
+    int check = bottomUpTree(0, stretchDepth).itemCheck();
+    WriteLine("stretch tree of depth " + stretchDepth + "\t check: " + check);
+    TreeNode longLivedTree = bottomUpTree(0,maxDepth);
+    for (int depth in <int>.RangeWithStep(minDepth, maxDepth+1, 2))
+    {
+      int iterations = 1.ShiftLeft(maxDepth - depth + minDepth);
+      check = 0;
+      for (int i in 1..iterations+1)
+      {                  
+        check = check + bottomUpTree(i,depth).itemCheck();
+        check = check + bottomUpTree(-i,depth).itemCheck();
+      }
+      WriteLine("" + (iterations*2) + "\t trees of depth " + depth + "\t check: " + check);
+    }
+    WriteLine("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck());
+  }
+
+  TreeNode bottomUpTree(int item, int depth){
+    if (depth>0){
+      return new TreeNode(
+        bottomUpTree(2*item-1, depth-1)
+        , bottomUpTree(2*item, depth-1)
+        , item
+        );
+    }
+    else {
+      return new TreeNode(null, null, item);
+    }
+  }
+
+}                                                                  
+                                                                    
+class TreeNode
+{
+  TreeNode left;
+  TreeNode right;
+  int item;
+
+  this(TreeNode left, TreeNode right, int item){
+    this.left = left;
+    this.right = right;
+    this.item = item;
+  }
+
+  int itemCheck(){
+    // if necessary deallocate here
+    if (!?left) return item;
+    else return item + left.itemCheck() - right.itemCheck();
+  }
+}

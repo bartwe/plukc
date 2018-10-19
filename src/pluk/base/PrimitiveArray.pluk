@@ -1,0 +1,35 @@
+class pluk.base.PrimitiveArray<T>
+{
+	int buffer;
+	int length;
+	
+	this(int length, T initialValue)
+	{
+	  if (length < 0)
+	    throw new ArgumentOutOfRangeException("length");
+		this.length = length;
+		buffer = 0;
+		Alloc(length, initialValue);
+	}
+	
+	int Length { get { return length; } }
+	
+	T OperatorGetIndex(int index)
+	{
+	  if ((index < 0) || (index >= length))
+	    throw new ArgumentOutOfRangeException("index");
+	  return InnerOperatorGetIndex(index);
+	}
+	
+	void OperatorSetIndex(int index, T value)
+	{
+	  if ((index < 0) || (index >= length))
+	    throw new ArgumentOutOfRangeException("index");
+	  return InnerOperatorSetIndex(index, value);
+	}
+	
+	private extern T InnerOperatorGetIndex(int index);
+	private extern void InnerOperatorSetIndex(int index, T value);
+	private extern void Alloc(int length, T? initialValue);
+}
+

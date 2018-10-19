@@ -1,0 +1,11 @@
+class pluk.io.Path
+{
+	static String DirectorySeparatorChar
+	{ get { return "/"; } }
+
+	static String GetFullPath(String path)
+	{
+		//todo: normalize path and make it absolute
+		return path;
+	}
+}

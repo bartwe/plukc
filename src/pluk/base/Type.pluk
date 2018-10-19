@@ -1,0 +1,6 @@
+class pluk.base.Type
+{
+  string FullName { get { return InnerFullName(); } }
+  
+  extern private string InnerFullName();
+}

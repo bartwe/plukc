@@ -1,0 +1,7 @@
+class pluk.base.BoundsException: Exception
+{
+  this()
+    : Exception()
+  {
+  }
+}

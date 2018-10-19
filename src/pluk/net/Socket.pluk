@@ -1,0 +1,150 @@
+import pluk.io;
+
+class pluk.net.Socket : Disposable, Stream
+{
+  int handle;
+  int errno;
+  int errortaste;
+  bool closedForWriting;
+  bool closed;
+  
+  this(string server, string port)
+  {
+    this.handle = 0;
+    errno = 0;
+    errortaste = 0;
+    closedForWriting = false;
+    closed = false;
+    if (!InnerOpenSocket(server, port))
+      throw new IOException(InnerGetErrorMessage());
+  }
+  
+  internal this(int handle)
+  {
+    this.handle = 0;
+    errno = 0;
+    errortaste = 0;
+    closedForWriting = false;
+    closed = false;
+    if (!InnerOpen(handle))
+      throw new IOException(InnerGetErrorMessage());
+  }
+  
+  private extern bool InnerOpenSocket(string server, string port);
+  private extern bool InnerOpen(int handle);
+  private extern bool InnerClose();
+  private extern bool InnerCloseForWriting();
+  private extern string InnerGetErrorMessage();
+  private extern int InnerWrite(Array<byte> buffer, int offset, int limit);
+  private extern int InnerRead(Array<byte> buffer, int offset, int limit);
+  
+  override int Read(Array<Byte> buffer, int offset, int length, int limit)
+  {
+    if (closed)
+      throw new IOException("Stream is closed.");
+    if (limit <= 0)
+      throw new ArgumentException("limit");
+    if ((length < 0) || (length > limit))
+      throw new ArgumentException("length");
+    if ((offset < 0) || (offset+limit > buffer.Length))
+      throw new ArgumentException("Offset + limit must not be greater then the buffer length. "+offset+"+"+limit+"="+buffer.Length);
+    int res = 0;
+    while (true)
+    {
+      int r = InnerRead(buffer, offset + res, limit - res);
+      if (r == -2)
+        throw new IOException(InnerGetErrorMessage());
+      if (r == -1)
+      {
+        if (res == 0)
+          return -1;
+        return res;
+      }
+      res = res + r;
+      if (res >= length)
+        return res;
+      if (r == 0)
+        FiberProcessor.Yield(WaitableForRead());
+    }
+  }
+  
+  override int Write(Array<Byte> buffer, int offset, int length, int limit)
+  {
+    if (closedForWriting)
+      throw new IOException("Stream is closed for writing.");
+    if (limit <= 0)
+      throw new ArgumentException("limit");
+    if ((length < 0) || (length > limit))
+      throw new ArgumentException("length");
+    if ((offset < 0) || (offset+limit > buffer.Length))
+      throw new ArgumentException("offset");
+    int res = 0;
+    while (true)
+    {
+      int r = InnerWrite(buffer, offset + res, limit - res);
+      if (r == -2)
+        throw new IOException(InnerGetErrorMessage());
+      res = res + r;
+      if (res >= length)
+        return res;
+      if (r == 0)
+        FiberProcessor.Yield(WaitableForWrite());
+    }
+  }
+  
+  void CloseGracefully()
+  {
+    if (closed) return;
+    CloseForWriting();
+    var buf = new Array<Byte>(1, Byte.FromInt(0));
+    bool busy = true;
+    while (busy)
+    {
+      int r = Read(buf, 0, 1, 1);
+      if (r > 0)
+        throw new IOException("Failed to close connection gracefully, received data.");
+      busy = r == 0;
+    }
+    Close();
+  }
+  
+  void CloseForWriting()
+  {
+    if (!closedForWriting)
+    {
+      closedForWriting = true;
+      if (!InnerCloseForWriting())
+        throw new IOException(InnerGetErrorMessage());
+    }
+  }
+  
+  override void Close()
+  {
+    if (!closed) 
+    {
+      closed = true;
+      closedForWriting = true;
+      if (!InnerClose())
+        throw new IOException(InnerGetErrorMessage());
+    }
+  }
+  
+  override void Dispose()
+  {
+    Close();
+  }
+  
+  override Waitable WaitableForRead()
+  {
+    if (closed)
+      throw new IOException("Stream is closed.");
+    return new ReadSocketWaitable(handle);
+  }
+
+  override Waitable WaitableForWrite()
+  {
+    if (closedForWriting)
+      throw new IOException("Stream is closed for writing.");
+    return new WriteSocketWaitable(handle);
+  }
+}

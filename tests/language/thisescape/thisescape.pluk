@@ -1,0 +1,27 @@
+class thisescape : Application
+{
+  override void Main()
+  {
+    var a = new A();
+    a.Something();
+  }
+}
+
+class A
+{
+  int x;
+  
+  this()
+  {
+    if (true)
+      x = 1;
+      else 
+      x = 2;
+    Something();  
+    x = 0;
+  }
+  
+  void Something()
+  {
+  }
+}

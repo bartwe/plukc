@@ -1,0 +1,213 @@
+// Stream backed by an in memory buffer.
+
+// todo, do not use a single buffer but use a list of fixed size buffers
+// this to reduce heap fragmentation and remove the need for justifying the buffer
+// todo: do not allocate the buffer immediatly
+// todo: use as a circular buffer
+
+class pluk.io.BufferStream : Stream
+{
+  bool closed = false;
+  int capacity;
+  int writehead = 0;
+  int readhead = 0;
+  Byte zero = Byte.FromInt(0);
+  Array<Byte> buffer;
+  
+  bool IsEmpty
+  {
+    get
+    {
+      if (closed)
+        return false;
+      return writehead == readhead;
+    }
+  }
+  
+  int CountReadable
+  {
+    get
+    {
+      var r = writehead - readhead;
+      if (closed && (r == 0))
+        return -1;
+      return r;
+    }
+  }
+  int CountWriteable
+  {
+    get
+    {
+      if (readhead == writehead)
+      {
+        readhead = 0;
+        writehead = 0;
+      }
+      if (closed)
+        return -1;
+      return capacity - writehead;
+    }
+  }
+  int Capacity { get { return capacity; } }
+
+	int WritePosition {
+		get
+		{
+			return writehead;
+		}
+		set
+		{
+			if (value > capacity)
+				EnsureBuffer(value - capacity);
+			writehead = value;
+		}
+	}
+  
+  this()
+  : this(4096)
+  {
+  }
+  
+  this(int capacity)
+  {
+    if (capacity <= 0)
+      throw new Exception("Capacity must be positive.");
+    this.capacity = capacity;
+    buffer = new(capacity, Byte.FromInt(0));
+  }
+  
+  int ReadStream(IStream stream)
+  {
+    if (closed)
+      throw new Exception("closed");
+    EnsureBuffer(0);
+    int r = stream.Read(buffer, writehead, 0, capacity-writehead);
+    if (r > 0)
+      writehead = writehead + r;
+    return r;
+  }
+  
+  int WriteStream(OStream stream)
+  {
+    if (readhead == writehead)
+    {
+      if (closed)
+        return -1;
+      return 0;
+    }
+    int r = stream.Write(buffer, readhead, 0, writehead-readhead);
+    if (r > 0)
+      readhead = readhead + r;
+    return r;
+  }
+  
+  override int Read(Array<byte> buffer, int offset, int length, int limit)
+  {
+    if (length > limit)
+      throw new ArgumentException("limit");
+    if (length < 0)
+      throw new ArgumentException("length");
+    if ((offset < 0) || (offset+length > buffer.Length))
+      throw new ArgumentException("offset");
+    int result = limit;
+    int l = writehead - readhead;
+    if (result > l)
+      result = l;
+    if ((result < length) && !closed)
+      throw new IOException("Not enough data available to fully complete read requist for the given length, but stream is also not closed.");
+//    Console.WriteLine(""+readhead+":"+offset+":"+result);
+    <Array<byte>>.Copy(this.buffer, buffer, readhead, offset, result);
+    readhead = readhead + result;
+    if ((result == 0) && (CountReadable == -1))
+      return -1;
+    return result;
+  }
+  
+  int Peek(Array<byte> buffer, int offset, int length, int skip)
+  {
+    if (skip > CountReadable)
+      throw new ArgumentException("skip");
+    int result = length;
+    int l = writehead - readhead - skip;
+    if (result > l)
+      result = l;
+    <Array<byte>>.Copy(this.buffer, buffer, readhead + skip, offset, result);
+    if ((result == 0) && (CountReadable == -1))
+      return -1;
+    return result;
+  }
+  
+  void Skip(int length)
+  {
+    int l = writehead - readhead;
+    if (length > l)
+      throw new ArgumentException("length");
+    readhead = readhead + length;
+  }
+  
+  override int Write(Array<byte> buffer, int offset, int length, int limit)
+  {
+    if (length > limit)
+      throw new ArgumentException("limit");
+    if (closed)
+      throw new Exception("closed");
+    EnsureBuffer(length);
+    int result = limit;
+    if (result > (capacity - writehead))
+    {
+      throw new Exception("fail c"+capacity+" w:"+writehead+" r:"+readhead);
+//      result = capacity - writehead;
+    }
+    <Array<byte>>.Copy(buffer, this.buffer, offset, writehead, result);
+    writehead = writehead + result;
+    return result;
+  }
+  
+  private void EnsureBuffer(int needed)
+  {
+    if (needed < 0)
+      throw new ArgumentException("needed");
+    if (readhead == writehead)
+    {
+      readhead = 0;
+      writehead = 0;
+    }
+    while ((capacity - writehead) < needed)
+    {
+      if (readhead == 0)
+      {
+        capacity = capacity * 2;
+        var b = new Array<Byte>(capacity, Byte.FromInt(0));
+        <Array<Byte>>.Copy(buffer, b, 0, 0, writehead);
+        buffer = b;
+      }
+      else
+      {
+        <Array<Byte>>.Copy(buffer, buffer, readhead, 0, writehead-readhead);
+        writehead = writehead - readhead;
+        readhead = 0;
+        EnsureBuffer(needed);
+      }
+    }  
+  }
+  
+  override Waitable WaitableForRead()
+  {
+    return new CheckingWaitable(() => closed || (CountReadable > 0));
+  }
+  
+  override Waitable WaitableForWrite()
+  {
+    return new CheckingWaitable(() => closed || (CountWriteable > 0));
+  }
+  
+  override void Close()
+  {
+    closed = true;
+  }
+  
+  override void Dispose()
+  {
+    Close();
+  }
+}

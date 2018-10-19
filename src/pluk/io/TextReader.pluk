@@ -1,0 +1,12 @@
+abstract class pluk.io.TextReader : Disposable
+{
+  abstract string ReadLine();
+  abstract string? ReadLineOrEof();
+  abstract void Close();
+  
+  override void Dispose()
+  {
+    Close();
+  }
+}
+

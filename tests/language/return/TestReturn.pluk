@@ -1,0 +1,33 @@
+class TestReturn : Application
+{
+  override void Main()
+  {
+    WriteLine(""+a());
+    b();
+    c();
+    d();
+  }
+  int a()
+  {
+    return 3;
+  }
+  
+  void b()
+  {
+  }
+  
+  void c()
+  {
+    return;
+  }
+  
+  int d()
+  {
+    return 4;
+  }
+  
+  int e()
+  {
+    return 2;
+  }
+}

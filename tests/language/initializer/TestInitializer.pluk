@@ -1,0 +1,24 @@
+﻿class TestInitializer : Application
+{
+	override void Main()
+	{
+		A a = new A() { x ="woef", y=12 };
+		var b = new B() { {"woef", 12}, {"miauw", 14} };
+		b { {"ungf", 1} };
+                a = new() { x="aa", y = 42 };
+		a { y = 1 };
+	}
+}
+
+class A
+{
+	public string x = "";
+	public int y = 0;
+}
+
+class B
+{
+	public void Add(string x, int y)
+	{
+	}
+}

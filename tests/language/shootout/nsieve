@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -f output
+rm shootout.nsieve.exe
+rm shootout.nsieve.dbg
+pluk -ndp -p .. shootout.nsieve
+./shootout.nsieve.exe 2 > output
+diff output nsieve-output.txt

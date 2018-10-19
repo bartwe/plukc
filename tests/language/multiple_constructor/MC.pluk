@@ -1,0 +1,81 @@
+class MC : Application
+{
+  override void Main()
+  {
+    A a = new();
+  }
+}
+
+class A : B
+{
+  this()
+    : this("hoi")
+    {
+          <Console>.WriteLine("A()");
+
+    }
+  this(string x)
+    {
+          <Console>.WriteLine("A(string)");
+
+    }
+}
+
+class B : C, D
+{
+  this()
+    : E("la")
+  {
+  }
+}
+
+class C : E
+{
+  this()
+    : ("bla")
+    {
+      <Console>.WriteLine("C()");
+    }
+}
+
+class D : F, E
+{
+  this()
+    : G()
+    {
+    }
+}
+
+class E : G
+{
+  this()
+  {
+      <Console>.WriteLine("E()");
+  }
+  this(string x)
+  {
+      <Console>.WriteLine("E(string)");
+  }
+}
+
+class F : G
+{
+  this()
+   : G("bla")
+  {
+      <Console>.WriteLine("F()");
+  }
+}
+
+class G
+{
+  this()
+  {
+    <Console>.WriteLine("G()");
+  }
+  
+  this(string x)
+  {
+    <Console>.WriteLine("G(string)");
+  }
+}

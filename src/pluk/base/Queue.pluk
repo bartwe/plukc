@@ -1,0 +1,19 @@
+class pluk.base.Queue<T> : Iterable<T>
+{
+  List<T> list = new();
+  
+  void Enqueue(T value)
+  {
+    list.AddLast(value);
+  }
+  
+  T Dequeue()
+  {
+    return list.RemoveFirst();
+  }
+  
+  override Iterator<T> CreateIterator()
+  {
+    return list.CreateIterator();
+  }
+}

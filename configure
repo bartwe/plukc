@@ -1,0 +1,22 @@
+#!/bin/bash
+args=`getopt -u -o p: --long prefix: -o l --long local -n configure -- "$*"` ; errcode=$?; set -- $args
+prefix=/usr/local
+local=false
+for i
+do
+	if [ "$prev" = "--prefix" ] ; then
+		prefix=$i
+	elif [ "$prev" = "-p" ] ; then
+		prefix=$i
+	elif [ "$prev" = "--local" ] ; then
+		local=true
+	elif [ "$prev" = "-l" ] ; then
+		local=true
+	fi
+	prev=$i
+done
+echo PREFIX=$prefix
+arch=`uname -o`/`uname -m`
+echo ARCH=$arch
+echo LOCAL=$local
+./make/$arch/configure $prefix $local

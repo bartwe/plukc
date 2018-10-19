@@ -1,0 +1,19 @@
+class TestCast : Application
+{
+  override void Main()
+  {
+    WriteLine("a");
+    bool a = true;
+    WriteLine("b");
+    Object b = cast<Object>(a);
+    WriteLine("c");
+    bool c = cast<bool>(b);
+    WriteLine("d");
+    if (c)
+      WriteLine("f");
+    if (!c)
+      WriteLine("g");
+    WriteLine(c.ToString());
+    WriteLine("e");
+  }
+}

@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk TestContinue
+chmod +x ./TestContinue
+./TestContinue
+rm -f ./TestContinue{.exe,}

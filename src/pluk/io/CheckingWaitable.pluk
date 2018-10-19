@@ -1,0 +1,14 @@
+class pluk.io.CheckingWaitable: pluk.io.Waitable
+{
+  bool() check;
+  
+  this(<bool()> check)
+  {
+    this.check = check;
+  }
+  
+  override bool Test()
+  {
+    return check();
+  }
+}

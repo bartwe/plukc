@@ -1,0 +1,7 @@
+class pluk.io.IOException : Exception
+{
+  this(string error)
+  : (error)
+  {
+  }
+}

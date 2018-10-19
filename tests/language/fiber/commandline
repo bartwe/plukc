@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk fiber
+chmod +x ./fiber
+./fiber
+rm -f ./fiber{.exe,}

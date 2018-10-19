@@ -1,0 +1,2 @@
+#!/bin/sh
+exec $prefix/lib/pluk/pluk.exe -p:h "$winprefix/lib/pluk/src" "$@"

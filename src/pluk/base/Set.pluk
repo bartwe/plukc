@@ -1,0 +1,68 @@
+class pluk.base.Set<T> : Collection<T>
+{
+  Map<T, bool> values = new();
+  
+  this()
+  {
+    values = new(new ObjectEqualityComparer<T>());
+  }
+  
+  this(EqualityComparer<T> comparator)
+  {
+    values = new(comparator);
+  }
+  
+  this(Iterable<T> items)
+  {
+    for(var item in items)
+      Add(item);
+  }
+  
+  override void Add(T value)
+  {
+    values.Add(value, true);
+  }
+  
+  void Remove(T value)
+  {
+    values.Remove(value);
+  }
+  
+  void Put(T value)
+  {
+    values[value] = true;
+  }
+  
+  void PutRange([T] values)
+  {
+    for (var v in values)
+      this.values[v] = true;
+  }
+  
+  void Clear()
+  {
+    values.Clear();
+  }
+  
+  bool Contains(T value)
+  {
+    return values.ContainsKey(value);
+  }
+
+  void RemoveAll(Iterable<T> removables)
+  {
+	for (var e in removables)
+		if (Contains(e))
+		Remove(e);
+  }
+  
+  override Iterator<T> CreateIterator()
+  {
+    return values.Keys.CreateIterator();
+  }
+  
+  override int Count
+  {
+    get { return values.Count; }
+  }
+}

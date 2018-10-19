@@ -1,0 +1,8 @@
+class a.Y
+{
+  void Hem()
+  {
+    X x = new();
+    x.Hi();
+  }
+}

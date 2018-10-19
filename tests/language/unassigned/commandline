@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p ../../ Unassigned
+chmod +x ./Unassigned
+./Unassigned
+rm -f ./Unassigned{.exe,}

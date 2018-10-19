@@ -1,0 +1,25 @@
+class TestTypes : Application
+{
+  override void Main()
+  {
+    pluk.base.Int[] arrayOfInt;
+    [int] iterableOfInt;
+  }
+  
+  int[] A()
+  {
+    return new(0,0);
+  }
+  
+  [int] B()
+  {
+    return new List<int>();
+  }
+  
+  void C(int[] a)
+  {}
+  
+  void D([int] a)
+  {
+  }  
+}

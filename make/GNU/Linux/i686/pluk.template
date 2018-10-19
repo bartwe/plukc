@@ -1,0 +1,2 @@
+#!/bin/sh
+exec mono $prefix/lib/pluk/pluk.exe $MONO_EXTRA_ARGS -p:h $prefix/lib/pluk/src "$@"

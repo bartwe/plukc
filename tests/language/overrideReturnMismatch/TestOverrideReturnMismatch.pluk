@@ -1,0 +1,28 @@
+class TestOverrideReturnMismatch : pluk.test.Application
+{
+  override void Main()
+  {
+    A a = new();
+    WriteLine(a.Woef());
+    B b = new();
+    WriteLine(b.Woef().ToString());
+    A c = new B();
+    WriteLine(c.Woef());
+  }
+}
+
+class A
+{
+  string Woef()
+  {
+    return "A";
+  }
+}
+
+class B : A
+{
+  override int Woef()
+  {
+    return 1;
+  }
+}

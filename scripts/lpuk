@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /cygdrive/e/git/plukc/dotnet/pluk.exe -ndp -p . -p `cygpath -wa /cygdrive/e/git/plukc/src` "$@"

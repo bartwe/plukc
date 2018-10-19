@@ -1,0 +1,4 @@
+class pluk.native.Pointer
+{
+	extern Pointer OperatorAdd(int value);
+}

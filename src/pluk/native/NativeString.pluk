@@ -1,0 +1,4 @@
+class pluk.native.NativeString
+{
+	static extern String CStringToString(Pointer cString);
+}

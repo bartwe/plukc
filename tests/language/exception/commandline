@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p ../../ -x:nf -a:v test.ExceptionTest
+chmod +x ./test.ExceptionTest
+./test.ExceptionTest
+rm -f ./test.ExceptionTest*

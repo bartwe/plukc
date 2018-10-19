@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p ../../ TestCommandline
+chmod +x ./TestCommandline
+./TestCommandline end begin
+rm -f ./TestCommandline{.exe,}

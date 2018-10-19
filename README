@@ -1,0 +1,22 @@
+To build and install run:
+./configure
+sudo make install
+
+To build and test run:
+./configure
+make build test
+
+
+2012-03-24: on cygwin you might need to do:
+/usr/bin/set-gcc-default-3.sh to get the -mno-cygwin option to work
+
+You may need to run /sbin/ldconfig to update the ld.so.cache
+
+depends upon atleast the following packages: (such as found on debian and
+ubuntu)
+
+build-essentials
+gcc
+mono-gmcs
+mono-2.0-devel
+libmono winforms (name may vary)

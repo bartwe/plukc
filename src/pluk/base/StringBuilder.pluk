@@ -1,0 +1,14 @@
+class pluk.base.StringBuilder
+{
+	String buffer = "";
+	
+	void Append(String value)
+	{
+		buffer = buffer + value;
+	}
+	
+	override String ToString()
+	{
+		return buffer;
+	}
+}

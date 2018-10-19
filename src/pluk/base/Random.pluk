@@ -1,0 +1,19 @@
+class pluk.base.Random
+{
+  this()
+  {
+    Randomize();
+  }
+  
+  extern int NextInt();
+  
+  extern void Randomize();
+  
+  string HexString(int length)
+  {
+    StringBuilder sb = new();
+    for(in 0..length)
+      sb.Append((NextInt() % 16).ToHexString());
+    return sb.ToString();
+  }
+}

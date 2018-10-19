@@ -1,0 +1,16 @@
+fa
+fb
+fc
+fd
+try
+finally
+Exception caught: 
+Exception caught: 
+test.ExceptionTest.C()
+B.this(test.ExceptionTest meh)
+C.this(test.ExceptionTest meh)
+test.ExceptionTest.B:get
+test.ExceptionTest.A()
+test.ExceptionTest.Main()
+2
+good

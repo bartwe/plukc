@@ -1,0 +1,20 @@
+class TestOverload : pluk.test.Application
+{
+  override void Main()
+  {
+    A(1);
+    A("woef");
+    
+    <string(string)> c = A;
+  }
+  
+  private string A(int b)
+  {
+    return b.ToString();
+  }
+  
+  private string A(string c)
+  {
+    return c;
+  }
+}

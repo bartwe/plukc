@@ -1,0 +1,28 @@
+class pluk.base.Byte : Immutable
+{
+  private this() {}
+  
+  static byte FromInt(int value)
+  {
+    if ((value < 0)||(value > 255)) 
+      throw new ArgumentOutOfRangeException("value");
+    return FromIntUnsafe(value);
+  }
+  
+  static extern asm byte FromIntUnsafe(int value);
+  
+  int ToInt()
+  {
+    return InnerToInt();
+  }
+  
+  override string ToString()
+  {
+    return InnerToInt().ToString();
+  }
+  
+  private extern int InnerToInt();
+  
+  extern bool OperatorEquals(Byte other);
+  extern bool OperatorNotEquals(Byte other);
+}

@@ -1,0 +1,93 @@
+class TestStatic : Application
+{
+  override void Main()
+  {
+    A.X();
+    WriteLine(A.H());
+    var a = new A();
+    WriteLine(a.G());
+    a.I();
+    WriteLine(A.H());
+    WriteLine(B.K());
+    B.L();
+    WriteLine(a.G());
+    var b = new B();
+    b.M();
+    WriteLine(a.G());
+    WriteLine(b.N());
+    C.Test();
+  }
+}
+
+class A
+{
+  static string? v;
+  
+  static void X()
+  {
+    v = "X";
+  }
+  
+  string G()
+  {
+    return ~v;
+  }
+  
+  void I()
+  {
+    v = "Y";
+  }
+  
+  static string H()
+  {
+    return ~v;
+  }
+}
+
+class B : A
+{
+  static string K()
+  {
+    return ~v;
+  } 
+  
+  static void L()
+  {
+    v = "Z";
+  }
+  
+  void M()
+  {
+    v = "!";
+  }
+  
+  string N()
+  {
+    return ~v;
+  }
+}
+
+
+class C
+{
+  static int a = 123;
+  static string b = "hello "+W();
+  static string c;
+  
+  static string W()
+  {
+    return "World";
+  }
+  
+  static
+  {
+    var x = b;
+    string y = x;
+     c = y;
+  }
+  
+  static void Test()
+  {
+    Console.WriteLine(""+a+":"+b+":"+c);
+  }
+}

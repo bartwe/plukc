@@ -1,0 +1,35 @@
+class test.interop.Test1 : Application
+{
+	override void Main()
+	{
+	}
+	void XYZ()
+	{
+		WriteLine("test.interop.Test1: Test interop bindings");
+		int y = a(41, 0);
+		WriteLine(y.ToString());
+	}
+	
+	extern("
+	<interop>
+		<win32>
+			<spec library='pluk_base.dll' entrypoint='pluk_base__Test1__a' returns='int32'>
+				<parameter type='int32'/>
+				<parameter type='int32'/>
+			</spec>
+		</win32>
+		<lin32>
+			<spec library='libpluk-base.so' entrypoint='pluk_base__Test1__a' returns='int32'>
+				<parameter type='int32'/>
+				<parameter type='int32'/>
+			</spec>
+		</lin32>
+		<lin64>
+			<spec library='libpluk-base.so' entrypoint='pluk_base__Test1__a' returns='int64'>
+				<parameter type='int64'/>
+				<parameter type='int64'/>
+			</spec>
+		</lin64>
+	</interop>")
+	int a(int x, int y);
+}

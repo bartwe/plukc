@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -x:nf -a:v -p ../../ TestTernary
+chmod +x ./TestTernary
+./TestTernary
+rm -f ./TestTernary{.exe,}

@@ -1,0 +1,25 @@
+abstract class pluk.test.Application : pluk.base.Application
+{
+	public void Check(bool test)
+	{
+		if (!test)
+			throw new Exception();
+	}
+	
+	public void True(bool test)
+	{
+		if (!test)
+			throw new Exception();
+	}
+	
+	public void False(bool test)
+	{
+		if (test)
+			throw new Exception();
+	}
+	
+	public void Fail()
+	{
+		throw new Exception();
+	}
+}

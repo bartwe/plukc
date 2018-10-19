@@ -1,0 +1,30 @@
+class pluk.io.ManualWaitable: Waitable
+{
+  bool state = false;
+  
+  bool State { get { return state; } set { state = value; } }
+  
+  this()
+  {
+  }
+  
+  this(bool state)
+  {
+    this.state = state;
+  }
+  
+  void Set()
+  {
+    state = true;
+  }
+
+  void Reset()
+  {
+    state = false;
+  }
+  
+  override bool Test()
+  {
+    return state;
+  }
+}

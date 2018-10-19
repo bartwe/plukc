@@ -1,0 +1,46 @@
+import pluk.net;
+import pluk.io;
+import pluk.tag;
+
+class xmlformat : Application
+{
+  override void Main()
+  {
+    scope(var f = new FileStream("a.xml"))
+    {
+      var tag = XmlFormat.Read(f);
+      scope (var of = new FileStream("b.xml"))
+        XmlFormat.Write(of, tag, false);
+    }
+   
+    TestData("");
+    TestData("bart");
+    TestData("bart rules");
+    TestData("1");
+    TestData(" ");
+    TestData("\n");
+    TestData(" hi");
+    TestData("\nhi");
+    TestData("\nhi\n");
+    TestData("hi\nhi");
+    TestData("&");
+    TestData("<");
+    TestData(">");
+    TestData("/");
+    TestData("'");
+    TestData("\"");
+    TestData("`~!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/");
+  }
+  
+  void TestData(string data)
+  {
+    Tag tag = new("dataTest");
+    tag.Data = data;
+    var s = new BufferStream();
+    XmlFormat.Write(s, tag, false);
+    s.Close();
+    tag = XmlFormat.Read(s);
+    if (tag.Data != data)
+      throw new Exception("Data was not correctly processed end to end. expected:"+data+" found:"+tag.Data);
+  }
+}

@@ -1,0 +1,98 @@
+static class pluk.io.File
+{
+  static int GetFileSize(string filename)
+  {
+    var fsi = new FileMetadataImpl(filename);
+    if (fsi.HasError)
+      throw new IOException(fsi.GetErrorMessage());
+    return fsi.Size;
+  }
+  
+  static int GetFileTag(string filename)
+  {
+    var fsi = new FileMetadataImpl(filename);
+    if (fsi.HasError)
+      throw new IOException(fsi.GetErrorMessage());
+    return fsi.Tag;
+  }
+  
+  static string GetFileLastModifiedRFC2822(string filename)
+  {
+    var fsi = new FileMetadataImpl(filename);
+    if (fsi.HasError)
+      throw new IOException(fsi.GetErrorMessage());
+    return fsi.LastModified;
+  }
+  
+  static bool Exists(string filename)
+  {
+    var fsi = new FileMetadataImpl(filename);
+    var b = fsi.GetFileExists();
+    if (!?b)
+      throw new IOException(fsi.GetErrorMessage());
+    return ~b;
+  }	
+  
+  static void Rename(string sourceFilename, string targetFilename)
+  {
+    var errno = InnerRename(sourceFilename, targetFilename);
+    if (errno != 0)
+      throw new IOException(InnerGetErrorMessage(errno));
+  }
+
+  static void Delete(string filename)
+  {
+    var errno = InnerDelete(filename);
+    if (errno != 0)
+      throw new IOException(InnerGetErrorMessage(errno));
+  }
+  
+  static private extern int InnerRename(string sourceFilename, string targetFilename);
+  static private extern int InnerDelete(string sourceFilename);
+  static private extern string InnerGetErrorMessage(int errno);
+}
+
+private class pluk.io.FileMetadataImpl
+{
+  int errno;
+  int size;
+  string filename;
+  int tag; //size and time mixed into a tag
+  string? lastModified;
+  
+  this(string filename)
+  {
+    this.filename = filename;
+    errno = 0;
+    size = 0;
+    tag = 0;
+    lastModified = null;
+    Retrieve();
+  }
+
+  bool HasError
+  {
+    get { return errno != 0; }
+  }  
+  
+  int Size
+  {
+    get { return size; }
+  }
+
+  int Tag
+  {
+    get { return tag; }
+  }
+  
+  string LastModified
+  {
+    get { return ~lastModified; }
+  }
+  
+  extern void Retrieve();
+  
+  extern string GetErrorMessage();
+  
+  extern bool? GetFileExists();
+}

@@ -1,0 +1,18 @@
+import pluk.io;
+
+class pluk.net.ReadSocketWaitable : Waitable
+{
+  int handle;
+  
+  this(int handle)
+  {
+    this.handle = handle;
+  }
+  
+  override bool Test()
+  {
+    return InnerTest();
+  }
+  
+  private static extern bool InnerTest();
+}

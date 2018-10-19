@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -a:v -p ../../ TestOverload
+chmod +x ./TestOverload
+./TestOverload
+rm -f ./TestOverload{.exe,}

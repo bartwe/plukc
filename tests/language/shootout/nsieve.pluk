@@ -1,0 +1,38 @@
+class shootout.nsieve : Application
+{
+	override void Main()
+	{
+		int n = 9;
+		if (Arguments.Count > 1)
+			n = int.Parse(Arguments[1]);
+		if (n < 2)
+			n = 2;
+		for (int t in 0..3)
+		{
+			int m = (1 << (n - t)) * 10000;
+			WriteLine("Primes up to " + m.ToString().PadLeft(" ", 8) + " " + Nsieve(m).ToString().PadLeft(" ", 8));
+		}
+	}
+
+	int Nsieve(int m)
+	{
+		int count = 0;
+		Array<bool> isPrime = new(m + 1, true);
+		int i = 2;
+		while (i <= m)
+		{
+			if (isPrime[i])
+			{
+				int k = i+i;
+				while (k <= m)
+				{
+					isPrime[k] = false;
+					k = k + i;
+				}
+				count = count + 1;
+			}
+			i = i + 1;
+		}
+		return count;
+	}
+}

@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk thisescape
+chmod +x ./thisescape
+./thisescape
+rm -f ./thisescape{.exe,}

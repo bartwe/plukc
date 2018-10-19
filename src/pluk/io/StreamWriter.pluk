@@ -1,0 +1,52 @@
+class pluk.io.StreamWriter : TextWriter, OStream
+{
+  OStream stream;
+  Array<byte> buffer = new(4096, byte.FromInt(0));
+  bool cr;
+
+  bool CarriageReturn { get { return cr; } set { cr = value; } }
+  
+  this(OStream stream)
+  {
+    this.stream = stream;
+    cr = false;
+  }  
+  
+  override void WriteLine(string text)
+  {
+    Write(text);
+    Write("\n");
+  }
+  
+  override void Write(string text)
+  {
+    if (text.Length == 0)
+      return;
+    var l = Utf8Encoding.StringToByteArray(text, buffer, 0, buffer.Length, cr);
+    if (l > buffer.Length)
+    {
+      int c = buffer.Length;
+      while (c < l)
+        c = c * 2;
+      buffer = new(c, byte.FromInt(0));
+      Write(text);
+    }
+    else
+      stream.Write(buffer, 0, l, l);
+  }
+  
+  override void Close()
+  {
+    stream.Close();
+  }
+  
+  override int Write(Array<Byte> buffer, int offset, int length, int limit)
+  {
+    return stream.Write(buffer, offset, length, limit);
+  }
+  
+  override Waitable WaitableForWrite()
+  {
+    return stream.WaitableForWrite();
+  }
+}

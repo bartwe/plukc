@@ -1,0 +1,14 @@
+class pluk.base.EmptyIterator<T> : Iterator<T>
+{
+  static EmptyIterator<T> Instance = new();
+  
+  override bool Move()
+  {
+    return false;
+  }
+  
+  override T Value()
+  {
+    throw new InvalidOperationException("May not call Value() before a call to Move() or after a call to Move() that returned false.");
+  }
+}

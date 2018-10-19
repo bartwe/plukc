@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk echo
+chmod +x ./echo
+./echo
+rm -f ./echo{.exe,}

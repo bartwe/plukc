@@ -1,0 +1,152 @@
+import pluk.io;
+
+class pluk.tag.Node
+{
+  Tag? Tag { get; internal set; }
+  string? Data { get; internal set; }
+  bool Close { get; private set; } = false;
+  
+  this(string data, bool close)
+  {
+    Data = data;
+    Close = close;
+  }
+  
+  this(Tag tag)
+  {
+    Tag = tag;
+    Data = null;
+  }
+  
+  this(string data)
+  {
+    Tag = null;
+    Data = data;
+  }
+}
+
+class pluk.tag.Tag : Iterable<Tag>
+{
+  List<Node> nodes = new();
+  Map<string, string> attributes = new();
+  
+  string Name { get; set; }
+  string Data
+  {
+    get
+    {
+      StringBuilder sb = new();
+      for (var node in nodes)
+        if (?node.Data)
+          sb.Append(~node.Data);
+      return sb.ToString();
+    }
+    set
+    {
+      Node? dataNode = null;
+      for (var node in nodes)
+        if (?node.Data)
+        {
+          if (?dataNode)
+            throw new Exception("Cannot set the Data property on a tag if it contains multiple data nodes");
+          dataNode = node;
+        }
+      if (!?dataNode)
+      {
+        nodes.Add(new(value));
+      }
+      else
+      {
+        (~dataNode).Data = value;
+      }
+    }
+  }
+  [Tag] Children
+  {
+    get
+    {
+      List<Tag> result = new();
+      for (var node in nodes)
+        if (?node.Tag)
+          result.Add(~node.Tag);
+      return result;
+    }
+  }
+  List<Node> Nodes { get { return nodes; } }
+  Map<string, string> Attributes { get { return attributes; } }
+
+  string OperatorGetIndex(string key) { return attributes[key]; }
+  void OperatorSetIndex(string key, string value) { attributes[key] = value; }
+  
+  this(string name)
+  {
+    if (name.Length == 0)
+      throw new ArgumentException("name");
+    this.Name = name;
+  }
+  
+  override Iterator<Tag> CreateIterator()
+  {
+    return Children.CreateIterator();
+  }
+  
+  Tag AddChild(string name)
+  {
+    Tag result = new(name);
+    nodes.Add(new Node(result));
+    return result;
+  }
+  
+  Tag GetChild(string name)
+  {
+    if (name.Contains("/"))
+      throw new Exception("'/' not allowed in tag names.");
+    return Select(name);
+  }
+
+  Tag ForceChild(string name)
+  {
+    if (name.Contains("/"))
+      throw new Exception("'/' not allowed in tag names.");
+    var result = TrySelect(name);
+    if (?result)
+      return ~result;
+    return AddChild(name);
+  }
+
+  void AddData(string data)
+  {
+    nodes.Add(new Node(data));
+  }
+  
+  Tag Select(string query)
+  {
+    var result = TrySelect(query);
+    if (!?result)
+      throw new Exception("No tag found for query: "+query);
+    return ~result;
+  }
+  
+  Tag? TrySelect(string query)
+  {
+    var q = query.Split("/");
+    Tag result = this;
+    for (var qu in q)
+    {
+      if (qu != "")
+      {
+        Tag? node = null;
+        for (var n in result.Nodes)
+          if ((?n.Tag)&&((~n.Tag).Name == qu))
+          {
+            node = ~n.Tag;
+            break;
+          }
+        if (!?node)
+          return null;
+        result = ~node;
+      }
+    }
+    return result;
+  }
+}

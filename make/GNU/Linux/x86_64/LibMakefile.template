@@ -1,0 +1,41 @@
+CFLAGS += -O0 -g -fPIC -Dpluk64
+
+.PHONY: default clean build install
+
+CWARNFLAGS = -Wall -pedantic -ansi -std=c99 -Wextra -Wunused -Wfloat-equal -Wpointer-arith -Wcast-align -Wunreachable-code -Werror -Wno-unused-parameter
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+%.o : %.c
+	$(CC) -c $(CFLAGS) $(CWARNFLAGS) -I./elf -I. $^ -o $@
+
+%.o : %.s
+	$(CC) -c $(CFLAGS) $(CWARNFLAGS) -I./elf -I. $^ -o $@
+
+%.o : %.S
+	$(CC) -c $(CFLAGS) $(CWARNFLAGS) -I./elf -I. $^ -o $@
+
+default: build
+
+clean:
+	rm -f *.o *.so *.lo *.la *~ elf/*.o net/*.o
+
+build: libpluk-base.so libpluk-io.so libpluk-net.so
+
+libpluk-base.so: $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.c,%.o,$(wildcard base/*.c)) $(patsubst %.c,%.o,$(wildcard elf/*.c)) $(patsubst %.s,%.o,$(wildcard x86_64/*.s)) $(patsubst %.S,%.o,$(wildcard x86_64/*.S))
+	$(CC) $(CFLAGS) -shared -Wl,-soname,libpluk-base.so -o $@ $^
+
+libpluk-io.so: libpluk-base.so $(patsubst %.c,%.o,$(wildcard io/*.c))
+	$(CC) $(CFLAGS) -shared -Wl,-soname,libpluk-io.so -L . -lpluk-base -o $@ $^
+
+libpluk-net.so: libpluk-base.so $(patsubst %.c,%.o,$(wildcard net/*.c))
+	$(CC) $(CFLAGS) -shared -Wl,-soname,libpluk-net.so -L . -lpluk-base -o $@ $^
+
+install: default
+	mkdir -p $prefix/lib/pluk/lib
+	install -t $prefix/lib/pluk/lib libpluk-base.so
+	install -t $prefix/lib/pluk/lib libpluk-io.so
+	install -t $prefix/lib/pluk/lib libpluk-net.so
+ifeq "$local" "false"
+	ldconfig $prefix/lib/pluk/lib
+endif

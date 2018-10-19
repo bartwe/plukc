@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -x:nf -a:v -p ../../ TestOverrideReturnMismatch
+chmod +x ./TestOverrideReturnMismatch
+./TestOverrideReturnMismatch
+rm -f ./TestOverrideReturnMismatch{.exe,}

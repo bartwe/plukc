@@ -1,0 +1,127 @@
+class test.ExceptionTest : pluk.test.Application
+{
+  override void Main()
+  {
+    new Fiber(()=>
+    {
+      WriteLine("fa");
+      try
+      {
+      WriteLine("fb");
+      }
+      finally
+      {
+      WriteLine("fc");
+      }
+      WriteLine("fd");
+    }).Invoke();
+    try
+    {
+      WriteLine("try");
+    }
+    finally
+    {
+      WriteLine("finally");
+    }
+    
+    try
+    {
+      try
+      {
+        throw new Exception();
+      }
+      finally {}
+    }
+    catch (Exception e)
+    {
+      WriteLine("Exception caught: "+e.Message);
+    }
+    try
+    {
+      try
+      {
+      	A();
+      }
+      finally
+      {
+      }
+    }
+    catch (Exception e)
+    {
+      WriteLine("Exception caught: "+e.Message);
+      for (var frame in e.Frames)
+        WriteLine(frame.Definition+"."+frame.Field);
+    }
+    D();
+  }
+
+  void A() 
+  {
+    B;
+  }
+
+  C B { get { return new C(this); } }
+  int C()
+  {
+    throw new Exception();
+  }
+  
+  void D()
+  {
+    E();
+    try
+    {
+      return;
+    }
+    catch(Exception e)
+    {
+      WriteLine("Woeps:"+e);
+    }
+  }
+  
+  void E()
+  {
+    F();
+    try
+    {
+      return;
+    }
+    finally
+    {
+      WriteLine("good");
+    }
+  }
+  
+  void F()
+  {
+    WriteLine(""+G());
+  }
+  
+  int G()
+  {
+    try
+    {
+      return 1;
+    }
+    finally
+    {
+      return 2;
+    }
+  }
+}
+
+class C : B
+{
+  this(test.ExceptionTest meh)
+    : (meh)
+  {
+  }
+}
+
+class B
+{
+  this(test.ExceptionTest meh)
+  {
+   meh.C();
+  }
+}

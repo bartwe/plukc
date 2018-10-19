@@ -1,0 +1,7 @@
+class pluk.base.InvalidOperationException : pluk.base.Exception
+{
+  this(string message)
+    : Exception(message)
+  {
+  }
+}

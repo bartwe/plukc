@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -a:v -p ../../ InfirredNew
+chmod +x ./InfirredNew
+./InfirredNew
+rm -f ./InfirredNew{.exe,}

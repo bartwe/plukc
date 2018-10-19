@@ -1,0 +1,5 @@
+public abstract class pluk.base.EqualityComparer<T>
+{
+	public int HashCode(T x);
+	public bool Equals(T x, T y);
+}

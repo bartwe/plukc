@@ -1,0 +1,6 @@
+#!/bin/bash
+../../../../scripts/lpuk xmlformat
+chmod +x ./xmlformat
+./xmlformat
+cat b.xml
+rm -f ./b.xml ./xmlformat{.exe,}

@@ -1,0 +1,7 @@
+class TN : Application
+{
+  override void Main()
+  {
+    var a = new();
+  }
+}

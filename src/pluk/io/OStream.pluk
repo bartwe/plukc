@@ -1,0 +1,25 @@
+abstract class pluk.io.OStream : Disposable
+{
+  abstract int Write(Array<Byte> buffer, int offset, int length, int limit);
+  abstract void Close();
+  abstract Waitable WaitableForWrite();
+
+  void Write(Array<Byte> buffer)
+  {
+    if (Write(buffer, 0, buffer.Length, buffer.Length) != buffer.Length)
+      throw new IOException("Not whole buffer was written.");
+  }
+  
+  int Write(Array<Byte> buffer, int offset, int length)
+  {
+    return Write(buffer, offset, length, length);
+  }
+  
+  void WriteByte(byte value)
+  {
+    Array<Byte> buf = new(0, Byte.FromInt(0));
+    buf[0] = value;
+    if (Write(buf, 0, 1, 1) != 1)
+      throw new Exception("Failure while writing byte.");
+  }
+}

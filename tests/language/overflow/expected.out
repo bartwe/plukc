@@ -1,0 +1,13 @@
+pluk.base.OverflowException: 
+  TestOverflow.Main()(TestOverflow.pluk:10)
+pluk.base.OverflowException: 
+  TestOverflow.Main()(TestOverflow.pluk:22)
+pluk.base.OverflowException: 
+  TestOverflow.Main()(TestOverflow.pluk:34)
+pluk.base.OverflowException: 
+  TestOverflow.Main()(TestOverflow.pluk:46)
+pluk.base.ArgumentOutOfRangeException: value
+  pluk.base.Byte.FromInt()(Byte.pluk:8)
+  TestOverflow.Main()(TestOverflow.pluk:56)
+pluk.base.OverflowException: 
+  TestOverflow.Main()(TestOverflow.pluk:67)

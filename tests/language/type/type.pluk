@@ -1,0 +1,8 @@
+class type : Application
+{
+  override void Main()
+  {
+    WriteLine(GetType().FullName);
+    WriteLine(GetType().GetType().FullName);
+  }
+}

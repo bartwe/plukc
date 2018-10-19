@@ -1,0 +1,6 @@
+class test.Arguments : pluk.test.Application
+{
+  override void Main()
+  {
+  }
+}

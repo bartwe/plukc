@@ -1,0 +1,338 @@
+abstract class pluk.base.Iterable<T>
+{
+	Iterator<T> OperatorIterate()
+	{
+		return CreateIterator();
+	}
+
+	abstract Iterator<T> CreateIterator();
+
+	Iterable<T> Filter(bool(T) predicate)
+	{
+		return new FilterIterable<T>(this, predicate);
+	}
+
+	Iterable<U> Map<U>(U(T) converter)
+	{
+		return new MapIterable<U, T>(this, converter);
+	}
+
+	Iterable<T> Take(int count)
+	{
+		return new TakeIterable<T>(this, count);
+	}
+
+	Iterable<T> Skip(int count)
+	{
+		return new SkipIterable<T>(this, count);
+	}
+
+	Iterable<T> Step(int count)
+	{
+		return new StepIterable<T>(this, count);
+	}
+
+	Iterable<T> Concat(Iterable<T> tail)
+	{
+		return new ConcatIterable<T>(this, tail);
+	}
+
+	U Fold<U>(U(U, T) folder, U base)
+	{
+		U result = base;
+		for (T t in this)
+			result = folder(t, result);
+		return result;
+	}
+	
+	void Foreach(void(T) action)
+	{
+		for (T t in this)
+			action(t);
+	}
+
+	bool Any(bool(T) predicate)
+	{
+		for (T t in this)
+			if (predicate(t))
+				return true;
+		return false;
+	}
+
+	bool All(bool(T) predicate)
+	{
+		for (T t in this)
+			if (predicate(t))
+				return false;
+		return true;
+	}
+
+	bool None(bool(T) predicate)
+	{
+		for (T t in this)
+			if (predicate(t))
+				return false;
+		return true;
+	}
+}
+
+internal class pluk.base.FilterIterable<T> : Iterable<T>
+{
+	Iterable<T> iterable;
+	bool(T) predicate;
+
+	this(Iterable<T> iterable, bool(T) predicate)
+	{
+		this.iterable = iterable;
+		this.predicate = predicate;
+	}
+
+	override Iterator<T> CreateIterator()
+	{
+		return new FilterIterator<T>(iterable.CreateIterator(), ~predicate);
+	}
+}
+
+internal class pluk.base.FilterIterator<T> : Iterator<T>
+{
+	Iterator<T> iterator;
+	bool(T) predicate;
+
+	this(Iterator<T> iterator, bool(T) predicate)
+	{
+		this.iterator = iterator;
+		this.predicate = predicate;
+	}
+
+	override bool Move()
+	{
+		while (iterator.Move())
+		{
+			if (predicate(iterator.Value()))
+				return true;
+		}
+		return false;
+	}
+
+	override T Value()
+	{
+		return iterator.Value();
+	}
+}
+
+internal class pluk.base.MapIterable<U, T> : Iterable<U>
+{
+	Iterable<T> iterable;
+	U(T) predicate;
+
+	this(Iterable<T> iterable, U(T) converter)
+	{
+		this.iterable = iterable;
+		thiss.converter = converter;
+	}
+
+	override Iterator<U> CreateIterator()
+	{
+		return new MapIteratorImpl<U, T>(iterable.CreateIterator(), converter);
+	}
+}
+
+internal class pluk.base.MapIteratorImpl<U, T> : Iterator<U>
+{
+	Iterator<T> iterator;
+	U(T) converter;
+	U? current;
+
+	this(Iterator<T> iterator, U(T) converter)
+	{
+		this.iterator = iterator;
+		this.converter = converter;
+	}
+
+	override bool Move()
+	{
+		if (iterator.Move())
+		{
+			current = converter(iterator.Value());
+			return true;
+		}
+		else
+		{
+			current = null;
+			return false;
+		}
+	}
+
+	override U Value()
+	{
+		return ~current;
+	}
+}
+
+internal class pluk.base.TakeIterable<T> : Iterable<T>
+{
+	Iterable<T> iterable;
+	int count;
+
+	this(Iterable<T> iterable, int count)
+	{
+		this.iterable = iterable;
+		this.count = count;
+	}
+
+	override Iterator<T> CreateIterator()
+	{
+		return new TakeIterator<T>(iterable.CreateIterator(), count);
+	}
+}
+
+internal class pluk.base.TakeIterator<T> : Iterator<T>
+{
+	Iterator<T> iterator;
+	int count;
+
+	this(Iterator<T> iterator, int count)
+	{
+	  if (count < 0)
+	    throw new ArgumentOutOfRangeException("count");
+		this.iterator = iterator;
+		this.count = count;
+	}
+
+	override bool Move()
+	{
+		if ((count > 0) && iterator.Move())
+		{
+			count = count - 1;
+			return true;
+		}
+		return false;
+	}
+
+	override T Value()
+	{
+		return iterator.Value();
+	}
+}
+
+internal class pluk.base.SkipIterable<T> : Iterable<T>
+{
+	Iterable<T> iterable;
+	int count;
+
+	this(Iterable<T> iterable, int count)
+	{
+	  if (count < 0)
+	    throw new ArgumentOutOfRangeException("count");
+		this.iterable = iterable;
+		this.count = count;
+	}
+
+	override Iterator<T> CreateIterator()
+	{
+		Iterator<T> result = iterable.CreateIterator();
+		while ((count > 0) && result.Move())
+			count = count - 1;
+		return result;
+	}
+}
+
+internal class pluk.base.ConcatIterable<T> : Iterable<T>
+{
+	Iterable<T> first;
+	Iterable<T> second;
+
+	this(Iterable<T> first, Iterable<T> second)
+	{
+		this.first = first;
+		this.second = second;
+	}
+
+	override Iterator<T> CreateIterator()
+	{
+		return new ConcatIterator<T>(first.CreateIterator(), second.CreateIterator());
+	}
+}
+
+internal class pluk.base.ConcatIterator<T> : Iterator<T>
+{
+	Iterator<T> first;
+	Iterator<T> second;
+	T? current;
+
+	this(Iterator<T> first, Iterator<T> second)
+	{
+		this.first = first;
+		this.second = second;
+	}
+
+	override bool Move()
+	{
+		if (first.Move())
+		{
+			current = first.Value();
+			return true;
+		}
+		if (second.Move())
+		{
+			current = second.Value();
+			return true;
+		}
+		return false;
+	}
+
+	override T Value()
+	{
+		return ~current;
+	}
+}
+
+internal class pluk.base.StepIterable<T> : Iterable<T>
+{
+	Iterable<T> iterable;
+	int count;
+
+	this(Iterable<T> iterable, int count)
+	{
+		this.iterable = iterable;
+		this.count = count;
+	}
+
+	override Iterator<T> CreateIterator()
+	{
+		return new StepIterator<T>(iterable.CreateIterator(), count);
+	}
+}
+
+internal class pluk.base.StepIterator<T> : Iterator<T>
+{
+	Iterator<T> iterator;
+	int count;
+	int skip;
+  
+	this(Iterator<T> iterator, int count)
+	{
+	  if (count <= 0)
+	    throw new ArgumentOutOfRangeException("count");
+		this.iterator = iterator;
+		this.count = count;
+		skip = count - 1;
+	}
+
+	override bool Move()
+	{
+	  while (skip < count)
+	  {
+	    if (!iterator.Move())
+  	    return false;
+  	  skip = skip + 1;
+	  }
+	  skip = 0;
+	  return true;
+	}
+
+	override T Value()
+	{
+		return iterator.Value();
+	}
+}

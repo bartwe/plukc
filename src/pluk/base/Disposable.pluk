@@ -1,0 +1,4 @@
+abstract class pluk.base.Disposable
+{
+	abstract void Dispose(); 
+}

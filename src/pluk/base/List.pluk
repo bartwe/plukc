@@ -1,0 +1,204 @@
+class pluk.base.List<T> : Sequence<T>
+{
+  // TODO: Add head/tail index so that add/remove at head also can be done in O(1) 
+  private Array<T?>? backing;
+  private int count = 0;
+  private int capacity = 0;
+  
+  this()
+  {
+  }
+  
+  this(Iterable<T> items)
+  {
+    for(var item in items)
+      Add(item);
+  }
+  
+  override void Add(T value)
+  {
+    if (count == capacity)
+    {
+      if (capacity == 0)
+        capacity = 16;
+      else
+        capacity = capacity * 2;
+      if (?backing)
+      {
+        Array<T?> n = new(capacity, null);
+        for (int i in 0..count)
+          n[i] = (~backing)[i];
+        backing = n;
+      }
+      else
+        backing = new(capacity, null);
+    }
+    (~backing)[count] = value;
+    count = count + 1;
+  }
+  
+  void AddLast(T value)
+  {
+    Add(value);
+  }
+  
+  T RemoveAt(int index)
+  {
+    var result = this[index];
+    count = count - 1;
+    if (index < count)
+      for (var i in index..count)
+        (~backing)[i] = (~backing)[i+1];
+    (~backing)[count] = null;
+    return result;
+  }
+
+  void RemoveAll(Iterable<T> removables)
+  {
+	Set<T> removablesSet = new(removables);
+	List<T> temp = new();
+	for (var e in this)
+		if (!removablesSet.Contains(e))
+			temp.Add(e);
+	backing = temp.backing;
+	count = temp.count;
+	capacity = temp.capacity;
+  }
+  
+  void Clear()
+  {
+    count = 0;
+    capacity = 0;
+    backing = null;
+  }
+
+  T RemoveFirst()
+  {
+    return RemoveAt(0);
+  }
+
+  T RemoveLast()
+  {
+    return RemoveAt(Count - 1);
+  }
+  
+  override T OperatorGetIndex(int index)
+  {
+    if ((index < 0)||(index >= count))
+      throw new ArgumentOutOfRangeException("index");
+    return ~~(~backing)[index];
+  }
+  
+  void OperatorSetIndex(int index, T value)
+  {
+    if ((index < 0)||(index >= count))
+      throw new ArgumentOutOfRangeException("index");
+    (~backing)[index] = value;
+  }
+  
+  T First { get { return OperatorGetIndex(0); } }
+  T Last { get { return OperatorGetIndex(Count - 1); } }
+  
+  override int Count { get { return count; } }
+  
+  bool IsEmpty { get { return count == 0; } }
+  
+  override Iterator<T> CreateIterator()
+  {
+    if (count == 0)
+      return <EmptyIterator<T>>.Instance;
+    return new ListIterator<T>(this);
+  }
+  
+  override Iterable<int> Indices
+  {
+    get
+    {
+      return 0..Count;
+    }
+  }
+}
+
+class pluk.base.EqList<T>
+{
+  static bool Remove(List<T> list, T item)
+  {
+    int? idx = Find(list, item);
+    if (!?idx)
+      return false;
+    list.RemoveAt(~idx);
+    return true;
+  }
+  
+  static int? Find(List<T> list, T item)
+  {
+    for (var i in 0..list.Count)
+    {
+      var b = list[i];
+      if ((?b && ?item && (~~b == ~~item)) || (!?b && !?item))
+        return i;
+    }
+    return null;        
+  }
+}
+
+class pluk.base.CmpList<T>
+{
+  static void Sort(List<T> list, bool(T,T) lessThan)
+  {
+    sort(list, 0, list.Count, lessThan);  
+  }
+  
+  private static void swap(List<T> list, int a, int b)
+  {
+    var t = list[a];
+    list[a] = list[b];
+    list[b] = t;
+  }
+
+  private static void sort(List<T> arr, int beg, int end, bool(T,T) lessThan)
+  {
+    if (end > beg + 1)
+    {
+      T piv = arr[beg];
+      int l = beg + 1;
+      int r = end;
+      while (l < r)
+      {
+        if (lessThan(piv, arr[l]))
+        {
+          r = r - 1;
+          swap(arr, l, r);
+        }
+        else
+          l = l + 1;
+      }
+      l = l -1;
+      swap(arr, l, beg);
+      sort(arr, beg, l, lessThan);
+      sort(arr, r, end, lessThan);
+    }
+  }
+}
+
+private class pluk.base.ListIterator<T> : Iterator<T>
+{
+  int index = -1;
+  List<T> list;
+  
+  this(List<T> list)
+  {
+    this.list = list;
+  }
+  
+  override bool Move()
+  {
+    index = index + 1;
+    return index < list.Count;
+  }
+  
+  override T Value()
+  {
+    return list[index];
+  }
+}

@@ -1,0 +1,13 @@
+class InfirredNew : Application
+{
+  override void Main()
+  {
+    A a = new();
+    <A!()> b = new;
+    A c = b();
+  }
+}
+
+class A
+{
+}

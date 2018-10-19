@@ -1,0 +1,87 @@
+class pluk.base.Exception
+{
+  List<CallFrame> frames = new();
+  string message;
+  
+  this()
+    : this("")
+  {
+  }
+  
+  this(string message)
+  {
+    this.message = message;
+  }
+  
+	private void Throw()
+	{
+	  FillInStackTrace();
+	  InnerThrow();
+	}
+	
+  private extern void InnerThrow();
+  
+  string Message { get { return message; } }
+  Iterable<CallFrame> Frames { get { return frames; } }
+  
+  override string ToString()
+  {
+    string result = GetType().FullName + ": " + Message;
+    for (CallFrame cf in frames)
+      result = result + "\n  " + cf.ToString();
+    return result;
+  }
+  
+  private void FillInStackTrace()
+  {
+    frames = new();
+    int framePointer = GetFramePointer();
+    while (ValidFramePointer(framePointer))
+    {
+      var f = new CallFrame(framePointer);
+      if (f.Line >= 0)
+        frames.Add(f);
+      framePointer = NextFramePointer(framePointer);
+    }
+    if (frames.Count >= 3)
+    {
+      frames.RemoveLast();
+      frames.RemoveLast();
+      frames.RemoveFirst();
+    }
+  }
+  
+  private extern int GetFramePointer();
+  private extern int NextFramePointer(int framePointer);
+  private extern bool ValidFramePointer(int framePointer);
+}
+
+class pluk.base.CallFrame
+{
+  private string source;
+  private int line;
+  private string definition;
+  private string field;
+
+  string Definition { get { return definition; } }
+  string Field { get { return field; } }
+  int Line { get { return line; } }
+  
+  internal this(int framePointer)
+  {
+    source = GetSource(framePointer);
+    line = GetLine(framePointer);
+    definition = GetDefinition(framePointer);
+    field = GetField(framePointer);
+  }
+  
+  override string ToString()
+  {
+    return definition +"."+ field +"("+ source +":"+ line.ToString() +")";
+  }
+  
+  private static extern string GetSource(int framePointer);
+  private static extern int GetLine(int framePointer);
+  private static extern string GetDefinition(int framePointer);
+  private static extern string GetField(int framePointer); 
+}

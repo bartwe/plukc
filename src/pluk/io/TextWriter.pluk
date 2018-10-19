@@ -1,0 +1,16 @@
+abstract class pluk.io.TextWriter : Disposable
+{
+  abstract void WriteLine(string text);
+  abstract void Write(string text);
+  abstract void Close();
+  
+  void WriteLine()
+  {
+    WriteLine("");
+  }
+  
+  override void Dispose()
+  {
+    Close();
+  }
+}

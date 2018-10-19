@@ -1,0 +1,35 @@
+class pluk.base.ByteArrayBuilder
+{
+  byte[] buffer = new(0, 0);
+  int count = 0;
+  int capacity = 0;
+  
+  void Clear()
+  {
+    count = 0;
+  }
+	
+	void Append(byte value)
+	{
+	  if (count == capacity)
+	  {
+	    if (capacity == 0)
+	      capacity = 256;
+	    else
+  	    capacity = capacity * 2;
+	    var b = new byte[](capacity, 0);
+	    for (var i in 0..count)
+	      b[i] = buffer[i];
+      buffer = b;
+	  }
+		buffer[count] = value;
+		count = count + 1;
+	}
+	
+	byte[] GetBuffer()
+	{
+		return buffer;
+	}
+	
+	int Count { get { return count; } }
+}

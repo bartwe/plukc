@@ -1,0 +1,41 @@
+class lambda : Application
+{
+  int q = 0;
+
+  string x1 = "a";
+  override void Main()
+  {
+    string x2 = "b";
+    WriteLine((x => x + x1 + x2)("x"));
+    <string(int)> l = x => x.ToString();
+    WriteLine(l(1));
+    int y = 39;
+    l = (x) => {
+     return (y + x).ToString();
+    };
+    WriteLine(l(3));
+    a((x) => x.ToString());
+
+    List<int(int)> ls = new();
+    b(ls);
+    c(ls);
+  }
+  
+  void a(string(int) b)
+  {
+    WriteLine(b(2));
+  }
+
+  void b(List<int(int)> ls)
+  {    
+    for (var i in 11..21)
+      ls.Add((x) => x+i+q);
+  }
+  
+  void c(List<int(int)> ls)
+  {
+    q = -12;
+    for (var la in ls)
+      WriteLine(la(2).ToString());
+  }
+}

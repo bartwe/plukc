@@ -1,0 +1,8 @@
+.PHONY: default install
+
+default:
+
+install:
+#	rm -Rf $prefix/lib/pluk/src
+	mkdir -p $prefix/lib/pluk/src/
+	cp -r pluk $prefix/lib/pluk/src/

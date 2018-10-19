@@ -1,0 +1,19 @@
+﻿class TestInitializer : Application
+{
+	override void Main()
+	{
+	}
+}
+
+class A
+{
+	public string x;
+	public int y;
+	public bool z;
+	public Object o;
+	
+	this()
+	{
+	  Object a = this;
+	}
+}

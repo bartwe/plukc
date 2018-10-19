@@ -1,0 +1,38 @@
+abstract class pluk.io.Waitable
+{
+  abstract bool Test();
+  
+  void WaitFor()
+  {
+    FiberProcessor.Yield(this);
+  }
+  
+  static void WaitFor(Iterable<Waitable> waitables)
+  {
+    List<Waitable> temp = new(waitables);
+    if (temp.IsEmpty)
+      return;
+    int len = temp.Count;
+    int count = 0;
+    while (true)
+    {
+      var idx = 0;
+      while (idx < len)
+      {
+        if (temp[idx].Test())
+          return;
+        idx = idx + 1;
+      }
+      if (count < 1000)
+      {
+        count = count + 1;
+        InnerYieldFast();
+      }
+      else
+        InnerYield();
+    }
+  }
+  
+  private static extern void InnerYieldFast();
+  private static extern void InnerYield();
+}

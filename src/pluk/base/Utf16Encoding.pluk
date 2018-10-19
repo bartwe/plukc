@@ -1,0 +1,24 @@
+class pluk.base.Utf16Encoding
+{
+  static string StringFromByteArray(Array<byte> buffer, int offset, int length)
+  {
+    throw new Exception();
+  }
+  
+  static Array<byte> GetBytes(string text)
+  {
+    throw new Exception();
+  }
+  
+  "
+    Copies the text string into the buffer, if the length is sufficient.
+    The return value is the number of bytes needed to store the string, if this is larger then length, the buffer content is undefined.
+  "
+  static int StringToByteArray(string text, Array<byte> buffer, int offset, int length, bool carriageReturn)
+  {
+    throw new Exception();
+  }
+  
+//  extern static private string InnerStringFromByteArray(Array<byte> buffer, int offset, int length);
+//  extern static private int InnerStringToByteArray(string text, Array<byte> buffer, int offset, int length);
+}

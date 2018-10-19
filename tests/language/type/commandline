@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk type
+chmod +x ./type
+./type
+rm -f ./type{.exe,}

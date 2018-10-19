@@ -1,0 +1,11 @@
+class pluk.base.Enum<T>
+{
+  private int value;
+  private string name;
+  
+  protected this(int value, string name)
+  {
+    this.value = value;
+    this.name = name;
+  }
+}

@@ -1,0 +1,53 @@
+import pluk.net;
+import pluk.io;
+
+class socket : Application
+{
+  override void Main()
+  {
+     WriteLine("woef");
+     WriteLine("a");
+     FiberProcessor.Fork(Server);
+     WriteLine("b");
+     FiberProcessor.Fork(Client);
+     WriteLine("c");
+  }
+  
+  void Server()
+  {
+     WriteLine("d");
+     ServerSocket ss = new("60013");
+     WriteLine("e");
+     var rs = ss.Accept();
+     WriteLine("f");
+     ss.Dispose();
+     WriteLine("g");
+     var dr = new DataStream(rs);
+     WriteLine("h");
+     dr.WriteString("heer");
+     WriteLine("i");
+     WriteLine(dr.ReadString());
+     WriteLine("j");
+     rs.CloseGracefully();
+     WriteLine("k");
+     dr.Dispose();
+     WriteLine("r");
+  }
+  
+  void Client()
+  {
+     WriteLine("l");
+     Socket ls = new ("localhost", "60013");
+     WriteLine("m");
+     var dl = new DataStream(ls);
+     WriteLine("n");
+     WriteLine(dl.ReadString());
+     WriteLine("o");
+     dl.WriteString("ween");
+     WriteLine("s");
+     ls.CloseGracefully();
+     WriteLine("p");
+     dl.Dispose();
+     WriteLine("q");
+  }
+}

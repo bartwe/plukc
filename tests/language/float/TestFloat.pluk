@@ -1,0 +1,20 @@
+
+class TestFloat : Application
+{
+  override void Main()
+  {
+    float a = 1;
+    WriteLine(a.ToString());
+    var b = a;
+    var c = 1.0;
+    var d = b + c;
+    WriteLine(""+d);
+    var e = d / 3;
+    WriteLine(""+e);
+    WriteLine(""+(e > d));
+    WriteLine(""+(e < d));
+    var f = e / 0;
+    WriteLine(""+f);
+    
+  }
+}

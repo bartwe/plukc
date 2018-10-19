@@ -1,0 +1,17 @@
+class test.List : pluk.test.Application
+{
+  override void Main()
+  {
+    List<int?> a = new ();
+    False(a.Count != 0);
+    a.Add(0);
+    False(a.Count != 1);
+    False(~a[0] != 0);
+    for (int i in 1..1001)
+      a.Add(i);
+    False(a.Count != 1001);
+    for (int i in 0..1001)
+      if (~a[i] != i)
+        Fail();
+  }
+}

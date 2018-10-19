@@ -1,0 +1,7 @@
+class pluk.io.BinaryStream : BinaryIStream, BinaryOStream
+{
+  this(Stream stream)
+    : BinaryIStream(stream), BinaryOStream(stream)
+    {
+    }
+}

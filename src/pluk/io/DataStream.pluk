@@ -1,0 +1,7 @@
+class pluk.io.DataStream : DataIStream, DataOStream
+{
+  this(Stream stream)
+    : DataIStream(stream), DataOStream(stream)
+    {
+    }
+}

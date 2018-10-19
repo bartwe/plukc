@@ -1,0 +1,4 @@
+abstract class pluk.base.Comparator<T>
+{
+  abstract bool Equals(T left, T right);
+}

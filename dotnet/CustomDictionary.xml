@@ -1,0 +1,22 @@
+   <Dictionary>
+      <Words>
+         <Unrecognized>
+            <Word>cb</Word>
+         </Unrecognized>
+         <Recognized>
+            <Word>allocator</Word>
+         </Recognized>
+         <Recognized>
+            <Word>toucher</Word>
+         </Recognized>
+         <Deprecated>
+            <Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
+         </Deprecated>
+      </Words>
+      <Acronyms>
+         <CasingExceptions>
+            <Acronym>CJK</Acronym>
+            <Acronym>Pi</Acronym>
+         </CasingExceptions>
+      </Acronyms>
+   </Dictionary>

@@ -1,0 +1,12 @@
+class pluk.io.Processable
+{
+  public Waitable waitable;
+  public <void()> invokable;
+  
+  this(Waitable waitable, <void()> invokable)
+  {
+    this.waitable = waitable;
+    this.invokable = invokable;
+  }
+}
+    

@@ -1,0 +1,37 @@
+class pluk.base.Console
+{
+	static void WriteLine()
+	{
+	  Write("\n");
+	}
+	
+	static void WriteLine(string data)
+	{
+		Write(data);
+		Write("\n");
+	}
+	
+	static void WriteErrorLine()
+	{
+	  Write("\n");
+	}
+	
+	static void WriteErrorLine(string data)
+	{
+		Write(data);
+		Write("\n");
+	}
+	
+	static string ReadLine()
+	{
+	  string s = InnerReadLine();
+	  if (s.EndsWith("\n"))
+	    return s.SubString(0, s.Length-1);
+	  return s;
+	}
+
+	static extern void Write(string data);
+	static extern void WriteError(string data);
+	static private extern String InnerReadLine();
+	static private extern bool InnerReadEof();
+}

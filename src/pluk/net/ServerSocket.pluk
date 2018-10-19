@@ -1,0 +1,66 @@
+import pluk.io;
+
+class pluk.net.ServerSocket : Disposable
+{
+  int handle;
+  int errno;
+  int errortaste;
+  bool closed;
+  
+  this(string port)
+  {
+    handle = 0;
+    errno = 0;
+    errortaste = 0;
+    closed = false;
+    if (!InnerOpen(port))
+      throw new IOException(InnerGetErrorMessage());
+  }
+  
+  override void Dispose()
+  {
+    Close();
+  }
+  
+  void Close()
+  {
+  	closed = true;
+    if (handle != 0)
+      InnerClose();
+  }
+  
+  Socket Accept()
+  {
+    while (true)
+    {
+      var socket = AcceptNb();
+      if (?socket)
+        return ~socket;
+      FiberProcessor.Yield(WaitableForAccept());
+    }
+  }
+  
+  Socket? AcceptNb()
+  {
+    if (closed)
+      throw new IOException("socket is closed");
+    int handle = InnerAccept();
+    if (handle == 0)
+	    return null;
+    if (handle == -1)
+      throw new IOException(InnerGetErrorMessage());
+    return new(handle);
+  }
+  
+  Waitable WaitableForAccept()
+  {
+    if (closed)
+      throw new IOException("Socket is closed.");
+    return new ReadSocketWaitable(handle);
+  }
+  
+  private extern bool InnerOpen(string port);
+  private extern int InnerAccept();
+  private extern bool InnerClose();
+  private extern string InnerGetErrorMessage();
+}

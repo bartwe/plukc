@@ -1,0 +1,101 @@
+class pluk.io.BinaryOStream: OStream
+{
+  OStream stream;
+  Array<Byte> intBuffer = new(4, 0);
+  
+  this(OStream stream)
+  {
+    this.stream = stream;
+  }
+  
+  void WriteIntegerBE4B(int value)
+  {
+    InnerBE4B(value, intBuffer);
+	  if (Write(intBuffer, 0, 4, 4) != 4)
+		throw new IOException("Failed to write to stream.");
+  }
+  
+  private extern void InnerBE4B(int value, Array<Byte> intBuffer);
+
+  void WriteIntegerBE2B(int value)
+  {
+	  intBuffer[1] = byte.FromInt(value % 256);
+	  value = value >> 8;
+	  intBuffer[0] = byte.FromInt(value % 256);
+	  if (Write(intBuffer, 0, 2, 2) != 2)
+		throw new IOException("Failed to write to stream.");
+  }
+
+  void WriteInteger1B(int value)
+  {
+	  intBuffer[0] = byte.FromInt(value % 256);
+	  if (Write(intBuffer, 0, 1, 1) != 1)
+		throw new IOException("Failed to write to stream.");
+  }
+
+  void WriteStringLPBE4B(string value)
+  {
+    int length = Utf8Encoding.StringToByteArray(value, intBuffer, 0, 0, false);
+    WriteIntegerBE4B(length);
+    if (length == 0)
+      return;
+    Array<byte> buffer = new(length, Byte.FromInt(0));
+    if (Utf8Encoding.StringToByteArray(value, buffer, 0, length, false) != length)
+      throw new IOException("Failed to convert string data to UTF-8.");
+    if (Write(buffer, 0, length, length) != length)
+      throw new IOException("Failed to write to stream.");
+  }
+
+  void WriteStringLF(string value)
+  {
+    int length = Utf8Encoding.StringToByteArray(value, intBuffer, 0, 0, false);
+    if (length != 0)
+    {
+  		Array<byte> buffer = new(length, Byte.FromInt(0));
+	  	if (Utf8Encoding.StringToByteArray(value, buffer, 0, length, false) != length)
+  		  throw new IOException("Failed to convert string data to UTF-8.");
+  		if (Write(buffer, 0, length, length) != length)
+	  	  throw new IOException("Failed to write to stream.");
+    }
+  	intBuffer[0] = 0x0a;
+	  if (Write(intBuffer, 0, 1, 1) != 1)
+	    throw new IOException("Failed to write to stream.");
+  }
+
+  void WriteStringCRLF(string value)
+  {
+    int length = Utf8Encoding.StringToByteArray(value, intBuffer, 0, 0, false);
+    if (length != 0)
+    {
+  		Array<byte> buffer = new(length, Byte.FromInt(0));
+	  	if (Utf8Encoding.StringToByteArray(value, buffer, 0, length, false) != length)
+		  throw new IOException("Failed to convert string data to UTF-8.");
+  		if (Write(buffer, 0, length, length) != length)
+	  	  throw new IOException("Failed to write to stream.");
+    }
+  	intBuffer[0] = 13;
+  	intBuffer[1] = 10;
+	  if (Write(intBuffer, 0, 2, 2) != 2)
+	    throw new IOException("Failed to write to stream.");
+  }
+
+  override int Write(Array<Byte> buffer, int offset, int length, int limit)
+  {
+    return stream.Write(buffer, offset, length, limit);
+  }
+  
+  override void Close()
+  {
+    stream.Close();
+  }
+  
+  override Waitable WaitableForWrite()
+  {
+    return stream.WaitableForWrite();
+  }
+  
+  override void Dispose()
+  {
+    stream.Dispose();
+  }
+}

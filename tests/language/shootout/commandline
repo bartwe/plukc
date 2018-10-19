@@ -1,0 +1,17 @@
+#!/bin/bash
+../../../scripts/lpuk -p .. shootout.nsieve
+chmod +x ./shootout.nsieve
+./shootout.nsieve
+rm -f ./shootout.nsieve{.exe,}
+../../../scripts/lpuk -p .. shootout.startup
+chmod +x ./shootout.startup
+./shootout.startup
+rm -f ./shootout.startup{.exe,}
+../../../scripts/lpuk -p .. shootout.fannkuch
+chmod +x ./shootout.fannkuch
+./shootout.fannkuch
+rm -f ./shootout.fannkuch{.exe,}
+../../../scripts/lpuk -p .. quicksort
+chmod +x ./quicksort
+./quicksort
+rm -f ./quicksort{.exe,}

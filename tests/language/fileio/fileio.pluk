@@ -1,0 +1,37 @@
+import pluk.io;
+
+class fileio : Application
+{
+  override void Main()
+  {
+    //todo: scope () {}
+    var fs = new FileStream("hi.txt");
+    var sr = new StreamReader(fs);
+    var sw = new StreamWriter(new FileStream("temp"));
+    bool busy = true;
+    while (busy)
+    {
+      var l = sr.ReadLineOrEof();
+      busy = ?l;
+      if (busy)
+      {
+        WriteLine(~l);
+        sw.WriteLine(~l);
+      }
+    }
+    sr.Close();
+    sw.Close();
+    WriteLine("--");
+    
+    var sr2 = new StreamReader(new FileStream("temp"));
+    busy = true;
+    while (busy)
+    {
+      var l = sr2.ReadLineOrEof();
+      busy = ?l;
+      if (busy)
+        WriteLine(~l);
+    }
+    sr2.Close();
+  }
+}

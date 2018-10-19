@@ -1,0 +1,6 @@
+class TestEmpty : Application
+{
+	override void Main()
+	{
+	}
+}

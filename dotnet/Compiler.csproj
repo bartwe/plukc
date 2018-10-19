@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E1358112-AA6E-4138-AB22-FA5B7E3884AB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Compiler</RootNamespace>
+    <AssemblyName>Compiler</AssemblyName>
+    <StartupObject>Compiler.Program</StartupObject>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Compiler</AssemblyName>
+    <RootNamespace>Compiler</RootNamespace>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Compiler</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assembler.cs" />
+    <Compile Include="Binary\WinPE32X86\Generator.cs" />
+    <Compile Include="Binary\WinPE32X86\Symbols.cs" />
+    <Compile Include="CheckHelper.cs" />
+    <Compile Include="ExternException.cs" />
+    <Compile Include="HexUtility.cs" />
+    <Compile Include="Metadata\AndExpression.cs" />
+    <Compile Include="Metadata\AsmExpression.cs" />
+    <Compile Include="Metadata\AssignmentExpression.cs" />
+    <Compile Include="JumpToken.cs" />
+    <Compile Include="Metadata\AsTypeExpression.cs" />
+    <Compile Include="Metadata\BooleanLiteralExpression.cs" />
+    <Compile Include="Metadata\Callable.cs" />
+    <Compile Include="Metadata\CallableCastFunction.cs" />
+    <Compile Include="Metadata\CastExpression.cs" />
+    <Compile Include="Metadata\CompoundStatement.cs" />
+    <Compile Include="Metadata\ContinueStatement.cs" />
+    <Compile Include="Metadata\DefinitionCastFunction.cs" />
+    <Compile Include="Metadata\DirectSlotExpression.cs" />
+    <Compile Include="Metadata\DocDeclaration.cs" />
+    <Compile Include="Metadata\Extern.cs" />
+    <Compile Include="Metadata\ForStatement.cs" />
+    <Compile Include="Metadata\IAssignableExpression.cs" />
+    <Compile Include="Metadata\Identifier.cs" />
+    <Compile Include="Metadata\IfAssignedExpression.cs" />
+    <Compile Include="Metadata\IfStatement.cs" />
+    <Compile Include="Metadata\IIncompleteSlotAssignment.cs" />
+    <Compile Include="Metadata\IndexorExpression.cs" />
+    <Compile Include="Metadata\InitializerExpression.cs" />
+    <Compile Include="Metadata\IPossibleTypeName.cs" />
+    <Compile Include="Metadata\IsAssignedExpression.cs" />
+    <Compile Include="Metadata\IsTypeExpression.cs" />
+    <Compile Include="Metadata\LambdaExpression.cs" />
+    <Compile Include="Metadata\LambdaAssembler.cs" />
+    <Compile Include="Metadata\NullExpression.cs" />
+    <Compile Include="Metadata\NumberLiteralExpression.cs" />
+    <Compile Include="Metadata\OrExpression.cs" />
+    <Compile Include="Metadata\PostfixExpression.cs" />
+    <Compile Include="Metadata\Property.cs" />
+    <Compile Include="Metadata\RecurStatement.cs" />
+    <Compile Include="Metadata\ScopeStatement.cs" />
+    <Compile Include="Metadata\StringLiteralExpression.cs" />
+    <Compile Include="Metadata\TernaryExpression.cs" />
+    <Compile Include="Metadata\TryStatement.cs" />
+    <Compile Include="Metadata\TypeExpression.cs" />
+    <Compile Include="Metadata\TypeName.cs" />
+    <Compile Include="Metadata\VarAssignmentStatement.cs" />
+    <Compile Include="Metadata\WhileStatement.cs" />
+    <Compile Include="ExpressionPrecedence.cs" />
+    <Compile Include="Metadata\WithStatement.cs" />
+    <Compile Include="ParserToken.cs" />
+    <Compile Include="ParserTokenKind.cs" />
+    <Compile Include="Prefetcher.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Set.cs" />
+    <Compile Include="Syntax.cs" />
+    <Compile Include="Generator.cs" />
+    <Compile Include="Importer.cs" />
+    <Compile Include="ILocation.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Region.cs" />
+    <Compile Include="Symbols.cs" />
+    <Compile Include="Binary\WinPE32X86\Importer.cs" />
+    <Compile Include="Binary\WinPE32X86\Linker.cs" />
+    <Compile Include="Binary\WinPE32X86\Writer.cs" />
+    <Compile Include="CompilerException.cs" />
+    <Compile Include="Metadata\Constructor.cs" />
+    <Compile Include="Metadata\Definition.cs" />
+    <Compile Include="Metadata\Expression.cs" />
+    <Compile Include="Metadata\CallExpression.cs" />
+    <Compile Include="Metadata\FieldExpression.cs" />
+    <Compile Include="Metadata\NewExpression.cs" />
+    <Compile Include="Metadata\SlotExpression.cs" />
+    <Compile Include="Metadata\NodeBase.cs" />
+    <Compile Include="Metadata\Method.cs" />
+    <Compile Include="Metadata\Modifiers.cs" />
+    <Compile Include="Metadata\Parameters.cs" />
+    <Compile Include="Metadata\Statement.cs" />
+    <Compile Include="Metadata\BlockStatement.cs" />
+    <Compile Include="Metadata\EmptyStatement.cs" />
+    <Compile Include="Metadata\ExpressionStatement.cs" />
+    <Compile Include="Metadata\ReturnStatement.cs" />
+    <Compile Include="Metadata\SlotStatement.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Require.cs" />
+    <Compile Include="Resolver.cs" />
+    <Compile Include="Metadata\TypeReference.cs" />
+    <Compile Include="Metadata\DefinitionCollection.cs" />
+    <Compile Include="Metadata\Field.cs" />
+    <Compile Include="Placeholder.cs" />
+    <Compile Include="Metadata\Nullability.cs" />
+    <Compile Include="Metadata\PrefixOperatorExpression.cs" />
+    <Compile Include="Metadata\ForceAssignedExpression.cs" />
+    <Compile Include="Metadata\InfixOperatorExpression.cs" />
+    <Compile Include="Metadata\PrepareIsolationExpression.cs" />
+    <Compile Include="Metadata\InferAssignedExpression.cs" />
+    <Compile Include="Binary\AssemblerX86_64.cs" />
+    <Compile Include="Binary\AssemblerX86.cs" />
+    <Compile Include="Binary\LinuxELF\Symbols.cs" />
+    <Compile Include="Binary\LinuxELF\StringTable.cs" />
+    <Compile Include="Binary\LinuxELF64X86_64\Generator.cs" />
+    <Compile Include="Binary\LinuxELF\Sections.cs" />
+    <Compile Include="Binary\LinuxELF\Section.cs" />
+    <Compile Include="Binary\LinuxELF\Importer.cs" />
+    <Compile Include="Binary\LinuxELF\DynamicSymbols.cs" />
+    <Compile Include="Binary\LinuxELF\Relocator.cs" />
+    <Compile Include="Binary\LinuxELF\Linker.cs" />
+    <Compile Include="Binary\LinuxELF32X86\Generator.cs" />
+    <Compile Include="Metadata\ThrowStatement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <GtkDesignInfo />
+      </Properties>
+    </MonoDevelop>
+    <VisualStudio />
+  </ProjectExtensions>
+</Project>

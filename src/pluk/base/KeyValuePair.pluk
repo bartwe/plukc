@@ -1,0 +1,14 @@
+class pluk.base.KeyValuePair<TKey, TValue>
+{
+  TKey key;
+  TValue value;
+  
+  TKey Key { get { return key; } }
+  TValue Value { get { return value; } }
+  
+  this(TKey key, TValue value)
+  {
+    this.key = key;
+    this.value = value;
+  }
+}

@@ -1,0 +1,7 @@
+class pluk.io.ActiveWaitable: Waitable
+{
+  override bool Test()
+  {
+    return true;
+  }
+}

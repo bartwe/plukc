@@ -1,0 +1,16 @@
+class test.Var : pluk.test.Application
+{
+	override void Main()
+	{
+		var a = true;
+		True(a);
+		//a = false;
+		//False(a);
+		int b = 0;
+		for (var i in 0..11)
+			b = b + i;
+		Check(b == 55);
+		var c = 23;
+		Check(c == 23);
+	}
+}

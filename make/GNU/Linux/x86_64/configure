@@ -1,0 +1,56 @@
+#!/bin/bash
+prefix=$1
+local=$2
+makedir=$(dirname $0)
+pwd=$(pwd)
+if [ "$local" = "true" ] ; then
+echo "Add the following export to your bash startup script."
+echo "This allows the pluk programs to find the the .so files."
+echo "And allows the compiler to be invoked with just 'pluk'"
+echo "export PATH=\$PATH:$prefix/bin"
+echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$prefix/lib/pluk/lib"
+fi
+rm -f $makedir/tmp
+cp $makedir/Makefile.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+rm -f $pwd/Makefile
+mv $makedir/tmp $pwd/Makefile
+
+rm -f $makedir/tmp
+cp $makedir/LibMakefile.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+sed -i "s|\$local|$local|g" $makedir/tmp
+rm -f $pwd/lib/Makefile
+mv $makedir/tmp $pwd/lib/Makefile
+
+rm -f $makedir/tmp
+cp $makedir/DotNetMakefile.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+rm -f $pwd/dotnet/Makefile
+mv $makedir/tmp $pwd/dotnet/Makefile
+
+rm -f $makedir/tmp
+cp $makedir/TestMakefile.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+sed -i "s|\$pwd|$pwd|g" $makedir/tmp
+rm -f $pwd/tests/Makefile
+mv $makedir/tmp $pwd/tests/Makefile
+
+rm -f $makedir/tmp
+cp $makedir/SrcMakefile.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+rm -f $pwd/src/Makefile
+mv $makedir/tmp $pwd/src/Makefile
+
+rm -f $makedir/tmp
+cp $makedir/pluk.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+rm -f $pwd/scripts/pluk
+mv $makedir/tmp $pwd/scripts/pluk
+
+rm -f $makedir/tmp
+cp $makedir/lpuk.template $makedir/tmp
+sed -i "s|\$prefix|$prefix|g" $makedir/tmp
+sed -i "s|\$pwd|$pwd|g" $makedir/tmp
+rm -f $pwd/scripts/lpuk
+mv $makedir/tmp $pwd/scripts/lpuk

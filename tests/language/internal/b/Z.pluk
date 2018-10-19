@@ -1,0 +1,8 @@
+class b.Z
+{
+  void meh()
+  {
+    a.X x = new();
+    x.Hi();
+  }
+}

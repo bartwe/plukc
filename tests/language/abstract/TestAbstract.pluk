@@ -1,0 +1,38 @@
+class TestAbstract : Application
+{
+  override void Main()
+  {
+    X x = new();
+    WriteLine(x.Hi());
+  }
+}
+
+abstract class B: C
+{
+  override string Hi()
+  {
+    return "woef";
+  }
+}
+
+abstract class C
+{
+  // abstract keyword is allowed but optional
+  string Hi();
+}
+
+abstract class D : C
+{
+}
+
+abstract class A: B, D
+{
+}
+
+class X: A
+{
+  override string Hi()
+  {
+    return "hi";
+  }
+}

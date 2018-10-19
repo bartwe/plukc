@@ -1,0 +1,76 @@
+// 
+//   The Great Computer Language Shootout
+//   http://shootout.alioth.debian.org/
+//
+//   original vala version by Clément David
+//   adapted by Bart van der Werf
+
+class shootout.fannkuch : Application
+{
+    static int fannkuch(int n) {
+      int check = 0;
+      Array<int> perm = new(n, 0);
+      Array<int> perm1 = new(n, 0);
+      Array<int> count = new(n, 0);
+      Array<int> maxPerm = new(n, 0);
+      int maxFlipsCount = 0;
+      int m = n - 1;
+ 
+      for (int i in 0..n) perm1[i] = i;
+      int r = n;
+
+      while (true) {
+         // write-out the first 30 permutations 
+         if (check < 30){
+           for(int i in 0..n) Console.Write((perm1[i]+1).ToString()); 
+           Console.WriteLine("");
+           check = check + 1;
+         }
+
+         while (r != 1){ count[r-1] = r; r = r -1; } 
+         if (! (perm1[0]==0 || perm1[m] == m)){       
+            for(int i in 0..n) perm[i] = perm1[i]; 
+            int flipsCount = 0;
+            int k;
+
+            while ( !((k=perm[0]) == 0) ) {
+               int k2 = (k+1) >> 1;
+               for(int i in 0..k2) {
+                  int temp = perm[i]; perm[i] = perm[k-i]; perm[k-i] = temp;
+               }
+               flipsCount = flipsCount + 1;
+            }
+
+            if (flipsCount > maxFlipsCount) {
+               maxFlipsCount = flipsCount;
+               for(int i in 0..n) maxPerm[i] = perm1[i];
+            }
+         } 
+
+         // Use incremental change to generate another permutation
+         while (true) {        
+            if (r == n) return maxFlipsCount;
+            int perm0 = perm1[0];
+            int i = 0;
+            while (i < r) {
+               int j = i + 1;
+               perm1[i] = perm1[j];
+               i = j;
+            }
+            perm1[r] = perm0;
+
+            count[r] = count[r] - 1;
+            if (count[r] > 0) break;
+            r = r + 1;
+         }
+      }
+   }
+
+  override void Main(){
+    int n = 7;
+    if (Arguments.Count > 1)
+      n = Int.Parse(Arguments[1]);
+    
+    WriteLine("Pfannkuchen("+n+") = " + fannkuch(n));
+   }
+}

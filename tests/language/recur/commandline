@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk TestRecur
+chmod +x ./TestRecur
+./TestRecur
+rm -f ./TestRecur{.exe,}

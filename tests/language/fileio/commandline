@@ -1,0 +1,8 @@
+#!/bin/bash
+../../../scripts/lpuk fileio
+rm -f ./test
+chmod +x ./fileio
+./fileio
+rm -f ./test
+rm -f ./fileio{.exe,}
+rm -f ./temp

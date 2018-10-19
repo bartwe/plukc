@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -a:v MC
+chmod +x ./MC
+./MC
+rm -f ./MC{.exe,}

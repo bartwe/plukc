@@ -1,0 +1,7 @@
+class shootout.startup : Application
+{
+	override void Main()
+	{
+		WriteLine("hello world");
+	}
+}

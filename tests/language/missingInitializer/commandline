@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -x:nf -p . TestInitializer
+chmod +x ./TestInitializer
+./TestInitializer
+rm -f ./TestInitializer{.exe,}

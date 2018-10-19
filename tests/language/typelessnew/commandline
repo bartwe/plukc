@@ -1,0 +1,3 @@
+#!/bin/bash
+../../../scripts/lpuk -a:v -x:nf TN
+rm -f ./TN{.exe,}

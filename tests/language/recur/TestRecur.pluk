@@ -1,0 +1,28 @@
+class TestRecur : Application
+{
+  override void Main()
+  {
+    A(0);
+    WriteLine(Factorial(12).ToString());
+  }
+  
+  void A(int value)
+  {
+    WriteLine(value.ToString());
+    if (value == 1)
+      WriteLine("c");
+    if (value == 3)
+      return;
+    recur(value + 1);
+  }
+  
+  int Factorial(int n)
+  {
+    return ((f, base) =>
+    {
+      if (f <= 1)
+        return base;
+      recur(f - 1, base * f);
+    })(n, 1);
+  }
+}

@@ -1,0 +1,30 @@
+class test.Bool : pluk.test.Application
+{
+  override void Main()
+  {
+    True(true);
+    False(false);
+    True(!false);
+    False(!true);
+    True(true && true);
+    False(false && true);
+    True(true || false);
+    False(false || false);
+    False(!true);
+    True(!false);
+    True(true == true);
+    False(true == false);
+    True(true != false);
+    False(false != false);
+    False(false != (true != true));
+    False(true == (false != false));
+    False(true != (true == true));
+    False(true == !(true == true));
+    False(?null);
+    True(!?null);
+    False(!!?null);
+    True(?1);
+    False(!?1);
+    True(!!?1);
+  }
+}

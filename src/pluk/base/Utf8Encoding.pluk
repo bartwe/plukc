@@ -1,0 +1,97 @@
+class pluk.base.Utf8Encoding
+{
+  static string GetString(Array<byte> bytes)
+  {
+    return StringFromByteArray(bytes, 0, bytes.Length);
+  }
+  
+  static Array<byte> GetBytes(string text)
+  {
+    Array<byte> buffer = new(0, 0);
+    int len = GetBytesLength(text);
+    buffer = new(len, 0);
+    StringToByteArray(text, buffer, 0, len, false);
+    return buffer;
+  }
+  
+  static int GetBytesLength(string text)
+  {
+    Array<byte> buffer = new(0, 0);
+    return StringToByteArray(text, buffer, 0, 0, false);
+  }
+  
+  static string StringFromByteArray(Array<byte> buffer, int offset, int length)
+  {
+    if (offset < 0)
+      throw new ArgumentOutOfRangeException("offset");
+    if ((length < 0)||(offset+length > buffer.Length))
+      throw new ArgumentOutOfRangeException("length");
+    Array<byte> b = new(length, 0);
+    byte cr = 13;
+    int rh = offset;
+    int wh = 0;
+    int limit = offset+length;
+    while (rh < limit)
+    {
+      var v = buffer[rh];
+      if (v != cr)
+      {
+        b[wh] = v;
+        wh = wh + 1;
+      }
+      rh = rh + 1;
+    }
+    return InnerStringFromByteArray(b, 0, wh);
+  }
+  
+  "
+    Copies the text string into the buffer, if the length is sufficient.
+    The return value is the number of bytes needed to store the string, if this is larger then length, the buffer content is undefined.
+  "
+  static int StringToByteArray(string text, Array<byte> buffer, int offset, int length, bool carriageReturn)
+  {
+    if (offset < 0)
+      throw new ArgumentOutOfRangeException("offset");
+    if ((length < 0)||(offset+length > buffer.Length))
+      throw new ArgumentOutOfRangeException("length");
+    var result = InnerStringToByteArray(text, buffer, offset, length);
+    if (!carriageReturn)
+      return result;
+    int count = 0;
+    var limit = offset + result;
+    var rh = offset;
+    byte nl = 10;
+    while (rh < limit)
+    {
+      if (nl == buffer[rh])
+        count = count + 1;
+      rh = rh + 1;
+    }
+    if (count == 0)
+      return result;
+    result = result + count;
+    byte cr = 13;
+    if (result <= length)
+    {
+      int wh = offset + result;
+      int rh = wh - count;
+      while ((wh > rh)&&(rh > 0))
+      {
+        wh = wh - 1;
+        rh = rh - 1;
+        var v = buffer[rh];
+        if (v == nl)
+        {
+          buffer[wh] = nl;
+          wh = wh - 1;
+          v = cr;
+        }
+        buffer[wh] = v;
+      }
+    }
+    return result;
+  }
+  
+  extern static private string InnerStringFromByteArray(Array<byte> buffer, int offset, int length);
+  extern static private int InnerStringToByteArray(string text, Array<byte> buffer, int offset, int length);
+}

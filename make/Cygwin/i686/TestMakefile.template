@@ -1,0 +1,8 @@
+.PHONY: default clean
+
+export PATH:=$(PATH):$pwd/lib
+
+default:
+	@cd compiler && make default
+	@cd language && make default
+	@cd pluk && make default

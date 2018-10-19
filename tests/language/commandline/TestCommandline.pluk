@@ -1,0 +1,8 @@
+class TestCommandline : Application
+{
+	override void Main()
+	{
+		for (var x in Arguments.Skip(1))
+			<Console>.WriteLine(x);
+	}
+}

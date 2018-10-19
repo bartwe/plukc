@@ -1,0 +1,27 @@
+class pluk.io.AnyWaitable : Waitable
+{
+  List<Waitable> waitables;
+  
+  this(Iterable<Waitable> waitables)
+  {
+    this.waitables = new(waitables);
+    if (this.waitables.Count == 0)
+      throw new Exception("Must wait for atleast 1 waitable");
+  }
+  
+  override bool Test()
+  {
+    int i = 0;
+    int c = waitables.Count;
+    while (i < c)
+    {
+      if (waitables[i].Test())
+        return true;
+      i = i + 1;
+    }
+    return false;
+  }
+}
+                                                                  
+                                                                  
+                                                                  

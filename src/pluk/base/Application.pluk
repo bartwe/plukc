@@ -1,0 +1,81 @@
+import pluk.io;
+
+public abstract class pluk.base.Application
+{
+	List<string> arguments = new();
+	Map<string, string> environment = new();
+	bool lazyArguments = true;
+	bool lazyEnvironment = true;
+	
+	public List<string> Arguments { get { if (lazyArguments) SetupArguments(); return ~arguments; } }
+	public Map<string, string> Environment { get { if (lazyEnvironment) SetupEnvironment(); return ~environment; } }
+	
+	this()
+	{
+	}
+	
+	void Write(string data)
+	{
+	  <Console>.Write(data);
+	}
+	
+	void WriteLine(string data)
+	{
+		<Console>.WriteLine(data);
+	}
+	
+	void WriteError(string data)
+	{
+	  <Console>.WriteError(data);
+	}
+	
+	void WriteErrorLine(string data)
+	{
+		<Console>.WriteErrorLine(data);
+	}
+	
+	string ReadLine()
+	{
+		return <Console>.ReadLine();
+	}
+	
+	abstract void Main();
+	
+	private void MainIndirect()
+	{
+	  FiberProcessor.Fork(Main);
+	  try
+	    FiberProcessor.Process();
+	  catch (Exception e)
+	    WriteErrorLine("Exception occured: " + e.ToString());
+	}
+	
+	private void SetupArguments()
+	{
+		lazyArguments = false;
+		{
+			for (int i in 0..<ApplicationHelper>.ArgumentCount())
+			{
+				arguments.Add(<ApplicationHelper>.ArgumentValue(i));
+			}
+		}
+	}
+	
+	private void SetupEnvironment()
+	{
+		lazyEnvironment = false;
+		for (int i in 0..<ApplicationHelper>.EnvironmentCount())
+		{
+			var env = <ApplicationHelper>.EnvironmentValue(i).Split("=", 2);
+			environment.Add(env[0], env[1]);
+		}
+	}
+}
+
+class pluk.base.ApplicationHelper
+{
+	static extern int ArgumentCount();
+	static extern string ArgumentValue(int index);
+	static extern int EnvironmentCount();
+	static extern string EnvironmentValue(int index);
+}

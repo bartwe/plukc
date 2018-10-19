@@ -1,0 +1,3 @@
+Type 'A' is not fully constructed, field 'x' is not assigned.
+chmod: cannot access `./TestInitializer': No such file or directory
+commandline: line 4: ./TestInitializer: No such file or directory

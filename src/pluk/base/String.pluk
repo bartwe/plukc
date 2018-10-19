@@ -1,0 +1,213 @@
+class pluk.base.String : Immutable
+{
+	override string ToString()
+	{
+		return this;
+	}
+
+    extern override int HashCode();	
+	extern bool OperatorEquals(string other);
+	int Length { get { return GetLength(); } }
+	private extern int GetLength();
+	
+	extern string OperatorAddInner(string other);
+
+	string OperatorAdd(Object other)
+	{
+		return OperatorAddInner(other.ToString());
+	}
+
+	bool OperatorNotEquals(string other)
+	{
+		return ! OperatorEquals(other);
+	}
+	
+	string PadLeft(string padding, int size)
+	{
+	  if (size < 0)
+	    throw new ArgumentOutOfRangeException("size");
+		if (size > Length)
+			return (padding + this).PadLeft(padding, size);
+		else
+			return this;
+	}
+	
+	List<string> Split(string seperator)
+	{
+	  return Split(seperator, int.MaxValue);
+	}
+	
+	List<string> Split(string seperator, int maxCount)
+	{
+	  if (maxCount < 0)
+	    throw new ArgumentOutOfRangeException("maxCount");
+		List<string> result = new();
+		int pos = 0;
+		int count = 1;
+		while (count != maxCount)
+		{
+			var p = Pos(seperator, pos);
+			if (?p)
+			{
+				count = count + 1;
+				result.Add(SubString(pos, ~p - pos));
+				pos = ~p + seperator.Length;
+			}
+			else
+				count = maxCount;
+		}
+		result.Add(SubString(pos, Length - pos));
+		return result;
+	}
+	
+	string SubString(int index)
+	{
+	  if (index >= 0)
+	    return SubString(index, Length - index);
+	  else
+	    return SubString(Length + index, -index);
+	}
+	
+	string Copy(int count)
+	{
+	  if (count >= 0)
+	    return SubString(0, count);
+	  else
+	    return SubString(0, Length + count);
+	}
+	
+	string SubString(int position, int length)
+	{
+	  int pos = position;
+	  if (pos < 0)
+	    pos = Length + pos;
+	  if ((pos < 0) || (pos > Length))
+	    throw new ArgumentOutOfRangeException("position: "+position);
+	  int len = length;
+	  if (len < 0)
+	    len = Length + len;
+	  if (pos + len > Length)
+	    throw new ArgumentOutOfRangeException("length: "+length);
+	  return InnerSubString(pos, len);
+	}
+	
+  int? IndexOf(string substring)
+  {
+    return Pos(substring, 0);
+  }
+  
+  int? IndexOf(string substring, int offset)
+  {
+    return Pos(substring, offset);
+  }
+
+  //todo: doesn't handle the empty substring very nicely
+  int? Pos(string substring, int offset)
+	{
+    if (offset < 0)
+      throw new ArgumentOutOfRangeException("offset");
+    if (substring.Length == 0)
+      throw new ArgumentOutOfRangeException("substring");
+    if (offset >= Length)
+      return null;
+    int r = InnerPos(substring, offset);
+    if (r < 0)
+      return null;
+    return r;
+	}
+	
+	bool StartsWith(string substring)
+	{
+	  if (substring.Length > Length)
+	    return false;
+    return SubString(0, substring.Length) == substring;	  
+	}
+	
+	bool EndsWith(string substring)
+	{
+	  if (substring.Length > Length)
+	    return false;
+    return SubString(Length - substring.Length, substring.Length) == substring;	  
+	}
+	
+	bool Contains(string substring)
+	{
+	  return ?Pos(substring, 0);
+	}
+	
+	string Replace(string substring, string value)
+	{
+  	var l = substring.Length;
+  	var offset = 0;
+	  if (l == 0)
+	    throw new ArgumentOutOfRangeException("substring");
+	  bool busy = true;
+	  string source = this;
+	  while (busy)
+	  {
+	    var pos = source.Pos(substring, offset);
+	    if (?pos)
+	    {
+  	    source = source.SubString(0, ~pos) + value + source.SubString(~pos + l, source.Length - (~pos + l));
+  	    offset = ~pos + value.Length;
+  	  }
+  	  else
+  	    busy = false;
+	  }
+	  return source;
+	}
+	
+	Iterable<String> Characters
+	{
+	  get
+	  {
+	    List<String> result = new();
+	    for (int i in 0..Length)
+	      result.Add(SubString(i, 1));
+	    return result;
+	  }
+	}
+
+	static bool IsNullOrEmpty(String? value)
+	{
+		if (!?value)
+			return true;
+		return (~value).Length == 0;
+	}
+
+	static String Format(String pattern, Object a) 
+	{
+		return Format(pattern, a.ToString(), "", "", "");
+	}
+	
+	static String Format(String pattern, Object a, Object b) 
+	{
+		return Format(pattern, a.ToString(), b.ToString(), "", "");
+	}
+	
+	static String Format(String pattern, String a, String b, String c, String d)
+	{
+		// don't keep this :)
+		return pattern.Replace("{0}", a).Replace("{1}", b).Replace("{2}", c).Replace("{3}", d);
+	}
+	
+	extern string Trim();
+	extern string ToUpperOrdinal();
+	extern string ToLowerOrdinal();
+	
+	extern int CompareOrdinal(string other);
+	extern int HashCodeOrdinal();
+	extern int CompareOrdinalIgnoreCase(string other);
+	extern int HashCodeOrdinalIgnoreCase();
+	
+	private extern string InnerSubString(int position, int length);
+	private extern int InnerPos(string substring, int offset);
+//upcase
+//downcase
+}
+
+// static strings do not get gc'ed
+// this is their type
+class pluk.base.StaticString : pluk.base.String
+{
+}

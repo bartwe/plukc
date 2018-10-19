@@ -1,0 +1,15 @@
+RCC ?= resgen2
+
+.PHONY: default build install clean
+
+default: build
+
+build:
+	$(RCC) Resource.resx Compiler.Resource.resources
+	gmcs -define:MONO -pkg:dotnet -r:Mono.Posix -recurse:'*.cs' -resource:Compiler.Resource.resources -out:pluk.exe
+	
+install: default
+	install pluk.exe $prefix/lib/pluk/pluk.exe
+	
+clean:
+	rm -f pluk.exe* Compiler.Resources.resources

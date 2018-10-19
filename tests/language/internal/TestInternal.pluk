@@ -1,0 +1,7 @@
+class TestInternal : Application
+{
+  override void Main()
+  {
+    WriteLine(">");
+  }
+}

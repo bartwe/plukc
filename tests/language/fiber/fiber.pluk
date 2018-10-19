@@ -1,0 +1,27 @@
+class fiber : Application
+{
+  override void Main()
+  {
+	Console.WriteLine("1");
+	var fiber = new Fiber(16000, (f) => {
+ 		Console.WriteLine("a");
+		f.Yield();
+ 		Console.WriteLine("b"+1);
+ 		Console.WriteLine("bb"+2);
+		f.Yield();
+ 		Console.WriteLine("c");
+		f.Yield();
+ 		Console.WriteLine("d");
+		f.Yield();
+ 		Console.WriteLine("e");
+	});
+	Console.WriteLine("2");
+	Console.WriteLine(fiber.Invoke().ToString());
+	Console.WriteLine("3");
+	while (fiber.Invoke())
+	{
+		Console.WriteLine(".");
+	}
+	Console.WriteLine("4");
+  }
+}

@@ -1,0 +1,4 @@
+abstract class pluk.io.PositionableStream: Stream
+{
+  abstract int Position { get; set; }
+}

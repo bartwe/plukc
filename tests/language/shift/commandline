@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk shift
+chmod +x ./shift
+./shift
+rm -f ./shift{.exe,}

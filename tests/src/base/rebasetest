@@ -1,0 +1,7 @@
+#!/bin/bash
+cd $1
+. commandline < input > output.out 2> output.err
+cat output.out > expected.out
+cat output.err > expected.err
+rm output.out
+rm output.err

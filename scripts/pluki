@@ -1,0 +1,9 @@
+#!/bin/bash
+TMPSOURCE=`mktemp -d -t` || exit 1
+echo "class Temp : Application { override void Main() { " > $TMPSOURCE/Temp.pluk
+cat $@ >> $TMPSOURCE/Temp.pluk 
+echo " } } " >> $TMPSOURCE/Temp.pluk
+cd $TMPSOURCE
+pluk -p $TMPSOURCE Temp
+chmod u+x $TMPSOURCE/Temp
+$TMPSOURCE/Temp $@

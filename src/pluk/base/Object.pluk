@@ -1,0 +1,19 @@
+class pluk.base.Object
+{
+	extern int HashCode();
+	extern Type GetType();
+	
+	string ToString()
+	{
+		return GetType().FullName + ":" + HashCode();
+	}
+    
+    static string ToString(Object? o) {
+        if (!?o)
+            return "null";
+        return (~o).ToString();
+    }
+
+	extern bool OperatorEquals(Object other);
+	extern bool OperatorNotEquals(Object other);
+}

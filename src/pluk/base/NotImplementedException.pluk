@@ -1,0 +1,6 @@
+class pluk.base.NotImplementedException : Exception
+{
+  this()
+  {
+  }
+}

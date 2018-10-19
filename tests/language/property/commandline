@@ -1,0 +1,5 @@
+#!/bin/bash
+../../../scripts/lpuk -p ../../ test.Property
+chmod +x ./test.Property
+./test.Property
+rm -f ./test.Property{.exe,}

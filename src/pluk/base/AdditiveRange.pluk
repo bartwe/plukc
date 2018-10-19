@@ -1,0 +1,54 @@
+class pluk.base.AdditiveRange<T> : Range<T>
+{
+	T from;
+	T to;
+	T step;
+	
+	this(T from, T to, T step)
+	{
+		this.from = from;
+		this.to = to;
+		this.step = step;
+	}
+	
+	override Iterator<T> CreateIterator()
+	{
+		return new AdditiveIterator<T>(from, to, step);
+	}	
+}
+
+class pluk.base.AdditiveIterator<T> : Iterator<T>
+{
+	bool first;
+	bool upwards;
+	T current;
+	T finish;
+	T step;
+
+	this(T from, T to, T step)
+	{
+		current = from;
+		finish = to;
+		this.step = step;
+		first = true;
+		upwards = step >= 0;
+	}
+	
+	override bool Move()
+	{
+		if (first)
+			first = false;
+		else
+			current = current + step;
+		if (upwards && (current >= finish)) 
+			return false;
+		if (!upwards && (current <= finish)) 
+			return false;
+		return true;
+	}
+	
+	override T Value()
+	{
+		return current;
+	}
+}

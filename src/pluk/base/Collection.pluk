@@ -1,0 +1,17 @@
+abstract class pluk.base.Collection<T> : Iterable<T>
+{
+  abstract int Count { get; }
+
+  Array<T> ToArray()
+  {
+    return new(this);
+  }
+  
+  abstract void Add(T item);
+  
+  void AddRange(Iterable<T> iter)
+  {
+    for (var item in iter)
+      Add(item);
+  }  
+}

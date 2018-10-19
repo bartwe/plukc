@@ -1,0 +1,2 @@
+chmod: cannot access `./test.Bool': No such file or directory
+commandline: line 4: ./test.Bool: No such file or directory

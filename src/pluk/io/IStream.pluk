@@ -1,0 +1,24 @@
+abstract class pluk.io.IStream : Disposable
+{
+  abstract int Read(Array<Byte> buffer, int offset, int length, int limit);
+  abstract void Close();
+  abstract Waitable WaitableForRead();
+
+  int Read(Array<Byte> buffer)
+  {
+    return Read(buffer, 0, buffer.Length, buffer.Length);
+  }
+  
+  int Read(Array<Byte> buffer, int offset, int length)
+  {
+    return Read(buffer, offset, length, length);
+  }
+  
+  byte? ReadByte()
+  {
+    Array<Byte> buf = new(1, 0);
+    if (Read(buf, 0, 1, 1) != 1)
+      return null;
+    return buf[0];
+  }
+}

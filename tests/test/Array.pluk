@@ -1,0 +1,49 @@
+class test.Array : pluk.test.Application
+{
+  override void Main()
+  {
+    {
+      Array<int> a = new(0, 0);
+      True(a.Length == 0);
+      a = new(10, 0);
+      True(a.Length == 10);
+      for (int i in 0..10)
+        if (a[i] != 0)
+          Fail();
+      for (int i in 0..10)
+        a[i] = i;
+      for (int i in 0..10)
+        if (a[i] != i)
+	  Fail();
+    }
+    {
+      Array<bool> a = new(0, false);
+      True(a.Length == 0);
+      a = new(10, false);
+      True(a.Length == 10);
+      for (int i in 0..10)
+        if (a[i] != false)
+	  Fail();
+      for (int i in 0..10)
+        a[i] = true;
+      for (int i in 0..10)
+        if (a[i] != true)
+	  Fail();
+    }      
+    {
+      Array<String?> a = new(0, null);
+      True(a.Length == 0);
+      a = new(10, "");
+      True(a.Length == 10);
+      for (int i in 0..10)
+        if (~a[i] != "")
+	  Fail();
+      for (int i in 0..10)
+        a[i] = i.ToString();
+      for (int i in 0..10)
+        if (~a[i] != i.ToString())
+	  Fail();
+    }      
+ WriteLine("Passed");
+  }
+}

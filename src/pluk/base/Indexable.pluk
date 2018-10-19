@@ -1,0 +1,12 @@
+abstract class pluk.base.Indexable<TKey, TValue>
+{
+  abstract Iterable<TKey> Indices { get; }
+  abstract TValue OperatorGetIndex(TKey index);
+  Iterable<TValue> OperatorGetIndex(Iterable<TKey> indices)
+  {
+    List<TValue> result = new();
+    for (var i in indices)
+      result.Add(OperatorGetIndex(i));
+    return result;
+  }
+}
