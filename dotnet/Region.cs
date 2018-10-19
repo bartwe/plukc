@@ -188,18 +188,21 @@ namespace Compiler
                 WriteInt32(data);
         }
 
+        byte[] _buffer = new byte[8];
+
         public void WriteInt64(long data)
         {
             unchecked
             {
-                stream.WriteByte((byte)((data >> 0) & 0xff));
-                stream.WriteByte((byte)((data >> 8) & 0xff));
-                stream.WriteByte((byte)((data >> 16) & 0xff));
-                stream.WriteByte((byte)((data >> 24) & 0xff));
-                stream.WriteByte((byte)((data >> 32) & 0xff));
-                stream.WriteByte((byte)((data >> 40) & 0xff));
-                stream.WriteByte((byte)((data >> 48) & 0xff));
-                stream.WriteByte((byte)((data >> 56) & 0xff));
+                _buffer[0] = (byte)((data >> 0) & 0xff);
+                _buffer[1] = (byte)((data >> 8) & 0xff);
+                _buffer[2] = (byte)((data >> 16) & 0xff);
+                _buffer[3] = (byte)((data >> 24) & 0xff);
+                _buffer[4] = (byte)((data >> 32) & 0xff);
+                _buffer[5] = (byte)((data >> 40) & 0xff);
+                _buffer[6] = (byte)((data >> 48) & 0xff);
+                _buffer[7] = (byte)((data >> 56) & 0xff);
+                stream.Write(_buffer, 0, 8);
             }
         }
 
@@ -207,10 +210,11 @@ namespace Compiler
         {
             unchecked
             {
-                stream.WriteByte((byte)((data >> 0) & 0xff));
-                stream.WriteByte((byte)((data >> 8) & 0xff));
-                stream.WriteByte((byte)((data >> 16) & 0xff));
-                stream.WriteByte((byte)((data >> 24) & 0xff));
+                _buffer[0] = (byte)((data >> 0) & 0xff);
+                _buffer[1] = (byte)((data >> 8) & 0xff);
+                _buffer[2] = (byte)((data >> 16) & 0xff);
+                _buffer[3] = (byte)((data >> 24) & 0xff);
+                stream.Write(_buffer, 0, 4);
             }
         }
 
@@ -218,8 +222,9 @@ namespace Compiler
         {
             unchecked
             {
-                stream.WriteByte((byte)((data >> 0) & 0xff));
-                stream.WriteByte((byte)((data >> 8) & 0xff));
+                _buffer[0] = (byte)((data >> 0) & 0xff);
+                _buffer[1] = (byte)((data >> 8) & 0xff);
+                stream.Write(_buffer, 0, 2);
             }
         }
 

@@ -1,70 +1,47 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Compiler
-{
-    public class ParserToken : ILocation
-    {
-        private int line;
-        private int column;
-        private string source;
-        private string token;
-        private string keyword;
-        private ParserTokenKind kind;
+namespace Compiler {
+    public class ParserToken : ILocation {
+        readonly int line;
+        readonly int column;
+        readonly string source;
+        readonly string token;
+        readonly ParserTokenKind kind;
 
         public int Line { get { return line; } }
         public int Column { get { return column; } }
         public string Source { get { return source; } }
         public string Token { get { return token; } }
-        public string Keyword { get { return keyword; } }
+
+        public string Keyword {
+            get {
+                switch (kind) {
+                    case ParserTokenKind.String:
+                        return "<String>";
+                    case ParserTokenKind.Number:
+                        return "<Number>";
+                    case ParserTokenKind.EndOfStream:
+                        return "<EndOfStream>";
+                    case ParserTokenKind.Identifier:
+                        return "<Identifier>";
+                    case ParserTokenKind.Keyword:
+                        return token;
+                    case ParserTokenKind.Symbol:
+                        return token;
+                    default: {
+                        Require.NotCalled();
+                        return "";
+                    }
+                }
+            }
+        }
+
         public ParserTokenKind Kind { get { return kind; } }
 
-        public ParserToken(string source, int line, int column, string token, ParserTokenKind kind)
-        {
+        public ParserToken(string source, int line, int column, string token, ParserTokenKind kind) {
             this.source = source;
             this.line = line;
             this.column = column;
             this.token = token;
             this.kind = kind;
-            switch (kind)
-            {
-                case ParserTokenKind.String:
-                    {
-                        this.keyword = "<String>";
-                        break;
-                    }
-                case ParserTokenKind.Number:
-                    {
-                        this.keyword = "<Number>";
-                        break;
-                    }
-                case ParserTokenKind.EndOfStream:
-                    {
-                        this.keyword = "<EndOfStream>";
-                        break;
-                    }
-                case ParserTokenKind.Identifier:
-                    {
-                        this.keyword = "<Identifier>";
-                        break;
-                    }
-                case ParserTokenKind.Keyword:
-                    {
-                        this.keyword = token;
-                        break;
-                    }
-                case ParserTokenKind.Symbol:
-                    {
-                        this.keyword = token;
-                        break;
-                    }
-                default:
-                    {
-                        Require.NotCalled();
-                        break;
-                    }
-             }
         }
     }
 }

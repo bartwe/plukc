@@ -53,20 +53,9 @@ namespace Compiler.Metadata
         public bool FieldsInitialized { get { return fieldsInitialized; } }
         public bool StaticFieldsInitialized { get { return staticFieldsInitialized; } }
 
-        public bool GarbageCollectable
-        {
-            get
-            {
-                if ((name.DataModifierLess == "pluk.base.Bool") ||
-                    (name.DataModifierLess == "pluk.base.Byte") ||
-                    (name.DataModifierLess == "pluk.base.Int") ||
-                    (name.DataModifierLess == "pluk.base.Float") ||
-                    (name.DataModifierLess == "pluk.base.Type") ||
-                    (name.DataModifierLess == "pluk.base.StaticString"))
-                    return false;
-                return true;
-            }
-        }
+        bool? garbageCollectable;
+        public bool GarbageCollectable  { get { return garbageCollectable.Value; } }
+
 
         public Placeholder RuntimeStruct
         {
@@ -104,6 +93,8 @@ namespace Compiler.Metadata
             foreach (TypeReference tr in parameters)
                 definitionName.AddTemplateParameter(tr.TypeName);
             result.name = definitionName;
+            result.UpdateNameMetadata();
+
             foreach (Field field in localFields)
             {
                 Field fieldMetadata = field.InstantiateTemplate(parameterMapping);
@@ -229,6 +220,17 @@ namespace Compiler.Metadata
             this.name.SetHasNamespace();
             if (name.Data != "pluk.base.Object")
                 AddExtends(new TypeName(new Identifier(this, "pluk.base.Object")));
+            UpdateNameMetadata();
+        }
+
+        void UpdateNameMetadata() {
+            garbageCollectable =
+                    (name.DataModifierLess == "pluk.base.Bool") ||
+                    (name.DataModifierLess == "pluk.base.Byte") ||
+                    (name.DataModifierLess == "pluk.base.Int") ||
+                    (name.DataModifierLess == "pluk.base.Float") ||
+                    (name.DataModifierLess == "pluk.base.Type") ||
+                    (name.DataModifierLess == "pluk.base.StaticString");
         }
 
         public void AddStaticInitializer(Statement statement)

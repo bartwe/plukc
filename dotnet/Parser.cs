@@ -94,8 +94,13 @@ namespace Compiler
         private void ReadToken()
         {
             char c = '.';
-            while (!source.EndOfStream)
+            while (true)
             {
+                var p = source.Peek();
+                if (p == -1) {
+                    buffer.Add(new ParserToken(sourceName, line, column, "<EndOfStream>", ParserTokenKind.EndOfStream));
+                    return;
+                }
                 c = Convert.ToChar(source.Peek());
                 if (!(char.IsWhiteSpace(c) || char.IsControl(c) || char.IsSeparator(c)))
                     break;
@@ -108,20 +113,18 @@ namespace Compiler
                     column++;
                 source.Read();
             }
-            if (source.EndOfStream)
-            {
-                buffer.Add(new ParserToken(sourceName, line, column, "<EndOfStream>", ParserTokenKind.EndOfStream));
-                return;
-            }
             if (char.IsHighSurrogate(c) || char.IsLowSurrogate(c))
                 throw new NotImplementedException("Due to lazyness only the BMP of unicode is supported, kick the developer.");
 
             if (c == '#')
             {
                 //comment
-                while (!source.EndOfStream)
+                while (true)
                 {
-                    c = Convert.ToChar(source.Read());
+                    var p = source.Read();
+                    if (p == -1) // eof
+                        break;
+                    c = Convert.ToChar(p);
                     if (c == '\n') // newline
                     {
                         column = 1;
@@ -141,9 +144,12 @@ namespace Compiler
                     if (c == '/')
                     {
                         // comment
-                        while (!source.EndOfStream)
+                        while (true)
                         {
-                            c = Convert.ToChar(source.Read());
+                            var p = source.Read();
+                            if (p == -1) // eof
+                                break;
+                            c = Convert.ToChar(p);
                             if (c == '\n') // newline
                             {
                                 column = 1;
@@ -172,9 +178,12 @@ namespace Compiler
                     binary = true;
                     source.Read();
                     column++;
-                    while (!source.EndOfStream)
+                    while (true)
                     {
-                        c = Convert.ToChar(source.Peek());
+                        var p = source.Peek();
+                        if (p == -1) //eof
+                            break;
+                        c = Convert.ToChar(p);
                         if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c == '_')))
                             break;
                         source.Read();
@@ -192,9 +201,11 @@ namespace Compiler
                     source.Read();
                     column++;
                     long value = 0;
-                    while (!source.EndOfStream)
-                    {
-                        c = Convert.ToChar(source.Peek());
+                    while (true) {
+                        var p = source.Peek();
+                        if (p == -1) //eof
+                            break;
+                        c = Convert.ToChar(p);
                         if (!((c >= '0' && c <= '1') || (c == '_')))
                             break;
                         source.Read();
@@ -215,9 +226,11 @@ namespace Compiler
                     source.Read();
                     column++;
                     long value = 0;
-                    while (!source.EndOfStream)
-                    {
-                        c = Convert.ToChar(source.Peek());
+                    while (true) {
+                        var p = source.Peek();
+                        if (p == -1) //eof
+                            break;
+                        c = Convert.ToChar(p);
                         if (!((c >= '0' && c <= '7') || (c == '_')))
                             break;
                         source.Read();
@@ -234,9 +247,11 @@ namespace Compiler
                 }
                 else
                 {
-                    while (!source.EndOfStream)
-                    {
-                        c = Convert.ToChar(source.Peek());
+                    while (true) {
+                        var p = source.Peek();
+                        if (p == -1) //eof
+                            break;
+                        c = Convert.ToChar(p);
                         if (!(char.IsDigit(c) || (c == '_')))
                             break;
                         source.Read();
@@ -285,9 +300,11 @@ namespace Compiler
                                 column++;
                             }
                         }
-                        while (!source.EndOfStream)
-                        {
-                            c = Convert.ToChar(source.Peek());
+                        while (true) {
+                            var p = source.Peek();
+                            if (p == -1) //eof
+                                break;
+                            c = Convert.ToChar(p);
                             if (!(char.IsDigit(c) || (c == '_')))
                                 break;
                             source.Read();
@@ -305,9 +322,11 @@ namespace Compiler
             {
                 sb.Append(Convert.ToChar(source.Read()));
                 column++;
-                while (!source.EndOfStream)
-                {
-                    c = Convert.ToChar(source.Peek());
+                while (true) {
+                    var p = source.Peek();
+                    if (p == -1) //eof
+                        break;
+                    c = Convert.ToChar(p);
                     if (!(char.IsLetterOrDigit(c) || (c == '_')))
                         break;
                     sb.Append(Convert.ToChar(source.Read()));
@@ -324,9 +343,11 @@ namespace Compiler
                 sb.Append(Convert.ToChar(source.Read()));
                 column++;
                 bool escaped = false;
-                while (!source.EndOfStream)
-                {
-                    c = Convert.ToChar(source.Read());
+                while (true) {
+                    var p = source.Read();
+                    if (p == -1) //eof
+                        break;
+                    c = Convert.ToChar(p);
                     column++;
                     sb.Append(c);
                     if (c == '\n') // newline
@@ -351,9 +372,11 @@ namespace Compiler
                 // operator (i guess)
                 sb.Append(Convert.ToChar(source.Read()));
                 column++;
-                while (!source.EndOfStream)
-                {
-                    c = Convert.ToChar(source.Peek());
+                while (true) {
+                    var p = source.Peek();
+                    if (p == -1) //eof
+                        break;
+                    c = Convert.ToChar(p);
                     if ((!(char.IsLetterOrDigit(c) ||
                             (c == '_') ||
                             char.IsWhiteSpace(c) ||

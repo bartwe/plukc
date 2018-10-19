@@ -2,7 +2,7 @@ using System;
 
 namespace Compiler
 {
-    public struct Placeholder
+    public struct Placeholder : IEquatable<Placeholder>
     {
         public static Placeholder Null { get { return default(Placeholder); } }
 
@@ -44,6 +44,19 @@ namespace Compiler
             Require.True(region.MemoryLocation != 0);
             Require.True(other.region.MemoryLocation != 0);
             return (region.MemoryLocation + offset) - (other.region.MemoryLocation + other.offset);
+        }
+
+        public bool Equals(Placeholder other) {
+            return (offset == other.offset) && (region == other.region);
+        }
+
+        public override bool Equals(object obj) {
+            Placeholder other = (Placeholder)obj;
+            return (offset == other.offset) && (region == other.region);
+        }
+
+        public override int GetHashCode() {
+            return region.GetHashCode() ^ (unchecked((int)offset) ^ (int)(offset >> 32));
         }
     }
 

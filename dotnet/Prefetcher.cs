@@ -69,8 +69,6 @@ namespace Compiler {
                 }
                 else {
                     var sr = Read(pending);
-                    if (sr != null)
-                        sr.Peek();
                     lock (responses_lock) {
                         responses.Add(pending, sr);
                     }
