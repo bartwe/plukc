@@ -15,8 +15,10 @@ You may need to run /sbin/ldconfig to update the ld.so.cache
 depends upon atleast the following packages: (such as found on debian and
 ubuntu)
 
-build-essentials
+build-essential
 gcc
 mono-gmcs
 mono-2.0-devel
 libmono winforms (name may vary)
+
+
