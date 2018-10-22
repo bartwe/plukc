@@ -224,13 +224,13 @@ namespace Compiler.Metadata
         }
 
         void UpdateNameMetadata() {
-            garbageCollectable =
+            garbageCollectable = !(
                     (name.DataModifierLess == "pluk.base.Bool") ||
                     (name.DataModifierLess == "pluk.base.Byte") ||
                     (name.DataModifierLess == "pluk.base.Int") ||
                     (name.DataModifierLess == "pluk.base.Float") ||
                     (name.DataModifierLess == "pluk.base.Type") ||
-                    (name.DataModifierLess == "pluk.base.StaticString");
+                    (name.DataModifierLess == "pluk.base.StaticString"));
         }
 
         public void AddStaticInitializer(Statement statement)
